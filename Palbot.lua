@@ -1,6 +1,6 @@
 localPath = scriptPath()
 commonLib = loadstring(httpGet("https://raw.githubusercontent.com/AnkuLua/commonLib/master/commonLib.lua"))()
-getNewestVersion = loadstring(httpGet("https://raw.githubusercontent.com/Paladiex/Palbot/master/version.lua"))
+getNewestVersion = loadstring(httpGet("https://raw.githubusercontent.com/ahxxm/Palbot/master/version.lua"))
 latestVersion = getNewestVersion()
 currentVersion = dofile(localPath .."version.lua")
 print (currentVersion)
@@ -23,9 +23,9 @@ function automaticUpdates ()
     if currentVersion == latestVersion then
       toast ("You are up to date!")
     else
-      httpDownload("https://raw.githubusercontent.com/Paladiex/Palbot/master/version.lua", localPath .."version.lua")
-      httpDownload("https://raw.githubusercontent.com/Paladiex/Palbot/master/Palbot.lua", localPath .."Palbot.lua")
-      httpDownload("https://raw.githubusercontent.com/Paladiex/Palbot/master/imageupdater.lua", localPath .."imageupdater.lua")
+      httpDownload("https://raw.githubusercontent.com/ahxxm/Palbot/master/version.lua", localPath .."version.lua")
+      httpDownload("https://raw.githubusercontent.com/ahxxm/Palbot/master/Palbot.lua", localPath .."Palbot.lua")
+      httpDownload("https://raw.githubusercontent.com/ahxxm/Palbot/master/imageupdater.lua", localPath .."imageupdater.lua")
       scriptExit("You have Updated Palbot!")
     end
   end
@@ -164,6 +164,7 @@ keep3Star = false
 keep2Star = false
 keep1Star = false
 keepAll = false
+customKeep = true
 runTestHighlight = false
 keepSpdMain = false
 screenshotSell = false
@@ -322,11 +323,20 @@ slot2MaxRegion = Region(825,668,345,165)
 slot3MaxRegion = Region(1215,668,345,165)
 slot4MaxRegion = Region(435,797,345,165)
 end
+keepSell = "default"
+runeRank = 1
+runeRarity = 1
+MainStat = 1
+subMatch = 1
+capRuneNo = 1
 function captureScreenshot()
+  toast("capturing screen shot")
   setImagePath(localPath .. "Runes/")
-  wait(1)
   rgn = Region(0, 0, getRealScreenSize():getX(), getRealScreenSize():getY())
-  rgn:save(tostring("Rune" .. getNetworkTime() .. ".png"))
+  rgn:save(tostring("Rune" .. tostring(capRuneNo) .. ".png"))
+  wait(1)
+  capRuneNo = capRuneNo + 1
+  toast("finished screenshot")
   setImagePath(localPath .. "1920x1080")
 end
 function zoomTest()
@@ -1486,6 +1496,7 @@ function victory()
   victoryDiamondRegion:existsClick(Pattern("victoryDiamond.png"):similar(imgAccuracy), 3)
   victoryDiamondRegion:existsClick(Pattern("victoryDiamond.png"):similar(imgAccuracy), 1)
   victoryDiamondRegion:existsClick(Pattern("victoryDiamond.png"):similar(imgAccuracy), 2)
+  wait(0.5)
   if not okRegion:existsClick(Pattern("ok.png"):similar(imgAccuracy), 1.5) then
     sellGetRune()
   end
@@ -1883,25 +1894,43 @@ function subEval()
   subMatch = math.floor(runeSubPercCnt / runeSubCnt * 100)
 end
 function sellRune()
-  if screenshotSell == true then
-    captureScreenshot()
-  end
+  setHighlightTextStyle(16777215, 4294967295, textSizeNum)
+  runeStatString = " " .. runeRank .. " star \n" .. runeRarity .. "(" .. slotString .. ") rune \n Main Stat: " .. mainStat .. "\n Pct subs: " .. subMatch .. "% \n" .. keepSell .. " "
+  runeStatRegion:highlight(runeStatString)
+  captureScreenshot()
   sellRegion:existsClick(Pattern("sell.png"):similar(.6))
   runeYesRegion:existsClick(Pattern("yes.png"):similar(.6))
   if runeRank == 6 then r6Sold = r6Sold + 1
   elseif runeRank == 5 then r5Sold = r5Sold + 1
   else runeSold = runeSold + 1
   end
+  runeStatRegion:highlightOff()
 end
 function getRune()
   if screenshotKeep == true then
+    setHighlightTextStyle(16777215, 4294967295, textSizeNum)
+    runeStatString = " " .. runeRank .. " star \n" .. runeRarity .. "(" .. slotString .. ") rune \n Main Stat: " .. mainStat .. "\n Pct subs: " .. subMatch .. "% \n" .. keepSell .. " "
+    runeStatRegion:highlight(runeStatString)
     captureScreenshot()
+    runeStatRegion:highlightOff()
   end
   getRegion:existsClick(Pattern("get.png"):similar(.6))
   if runeRank == 6 then r6Count = r6Count + 1
   elseif runeRank == 5 then r5Count = r5Count + 1
   else r6Count = r6Count + 1
   end
+end
+function runeKeepCustom ()
+   if runeRank == 5 and (runeRarity == "Hero" or runeRarity == "Legendary") then
+      keepSell = "Keeping Rune"
+      getRune()
+   elseif runeRank == 6 then
+      keepSell = "Keeping Rune"
+      getRune()
+   else
+      keepSell = "Selling Rune"
+      sellRune()
+   end
 end
 function runeKeep1 ()
   if runeRank == 6 and rareNum >= runeRarity6 then
@@ -2009,7 +2038,11 @@ function sellGetRune ()
     findRuneSlot()
     findMainStat()
     subEval()
-    runeKeep1()
+    if customKeep == true then
+      runeKeepCustom()
+    else
+      runeKeep1()
+    end
   end
 end
 function setLocation(a, b)
@@ -4287,7 +4320,7 @@ while true do
     end
     if closePurchaseRegion:existsClick(Pattern("closePurchase.png"):similar(imgAccuracy), 0.1) then
     end
-    if dialogTextCenterRegion:exists(Pattern("purchaseItem.png"):similar(imgAccuracy), 0.1) then
+    if dialogTextCenterRegion:exists(Pattern("PurchaseItem.png"):similar(imgAccuracy), 0.1) then
       hideBattleResult()
       closeXPurchaseRegion:existsClick(Pattern("closeX.png"):similar(imgAccuracy), 3)
       existsClick(Pattern("close.png"), 0.1)
