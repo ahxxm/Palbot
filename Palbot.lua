@@ -326,9 +326,10 @@ end
 keepSell = "default"
 runeRank = 1
 runeRarity = 1
-MainStat = 1
+mainStat = "none"
 subMatch = 1
 capRuneNo = 1
+slotString = "1"
 function captureScreenshot()
   toast("capturing screen shot")
   setImagePath(localPath .. "Runes/")
@@ -1489,7 +1490,9 @@ function defeated()
   if runAutoSwitchFodder == true or stopMaxLevel == true then
     isBattleSlotMax()
   end
+  wait(1)
   victoryDiamondRegion:existsClick(Pattern("victoryDiamond.png"):similar(.7), 3)
+  wait(1)
   replayRegion:existsClick(Pattern("replay.png"):similar(.7), 3)
 end
 function victory()
