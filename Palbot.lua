@@ -1880,7 +1880,8 @@ function findMainStat()
   elseif (bestMatchIndex == 8) then
     mainStat = ("ACC")
   else mainStat = ("NONE")
-    scriptExit ( "This rune's main stat cannot be determined")
+    mainStat = ("ACC")
+    toast("can't determine main stat") 
   end
   mainStatRegion:highlight()
 end
