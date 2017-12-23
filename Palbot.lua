@@ -4171,6 +4171,7 @@ while true do
   elseif runLiveArena == true then
     runLiveArenaStart()
   elseif not runLiveArena or not runQuickClick or not runRiftRaid then
+    takeSnapshot()
     if startRegion:exists(Pattern("start.png"):similar(imgAccuracy), 0.1) then
       start()
     end
@@ -4395,6 +4396,7 @@ while true do
     if battleIconRegion:existsClick(Pattern("iconBattle.png"), 0.1) then
       findMap()
     end
+    clearSnapshot()
   end
   wait(scanDelay)
 end
