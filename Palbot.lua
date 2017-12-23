@@ -33,140 +33,137 @@ end
 function defaultValues()
   monX = 0
   monY = 0
-winCount = 0
-loseCount = 0
-arenaWinCount = 0
-arenaLoseCount = 0
-arenaDrawCount = 0
-runeSave = 0
-r6Count = 0
-r6Sold = 0
-r5Count = 0
-r5Sold = 0
-runeSold = 0
-runLmt = 0
-bNum = 10
-customRunLmt = 0
-runLmtGroup = 0
-delayAmt = 0
-riftBattle = 0
-scanDelay = 0
-imgAccuracy = 0.7
-runeAccuracy = 0.9
-textSize = ""
-textSizeNum = 12
-timerMagicShop = 0
-timerNoActivity = 0
-timerNoRaidActivity = 0
-maxNoActivityTimeout = 600
-maxConnectionTimeout = 600
-maxNoRaidActivity = 120
-waitTimer = 30
-searchMagicShopCount = 0
-mysticalCount = 0
-legendaryCount = 0
-lightDarkCount = 0
-screenH = 0
-screenW = 0
-bottombar = 0
-sidebar = 0
-compareW = 0
-compareH = 0
-nextFodder = 1
-fodderX = 1245
-nonFlatSub = 0
-runeSubCnt = 0
-runeSubPercCnt = 0
-runeDetect = 0.8
-maxDetect = 0.9
-rareNum = 0
-runeRarity6 = 0
-runeRarity5 = 0
-runeRarity4 = 0
-runeRarity3 = 0
-runeRarity2 = 0
-runeRarity1 = 0
+  winCount = 0
+  loseCount = 0
+  arenaWinCount = 0
+  arenaLoseCount = 0
+  arenaDrawCount = 0
+  runeSave = 0
+  r6Count = 0
+  r6Sold = 0
+  r5Count = 0
+  r5Sold = 0
+  runeSold = 0
+  runLmt = 0
+  bNum = 10
+  customRunLmt = 0
+  runLmtGroup = 0
+  delayAmt = 0
+  riftBattle = 0
+  scanDelay = 0
+  imgAccuracy = 0.7
+  runeAccuracy = 0.9
+  textSize = ""
+  textSizeNum = 12
+  timerMagicShop = 0
+  timerNoActivity = 0
+  timerNoRaidActivity = 0
+  maxNoActivityTimeout = 600
+  maxConnectionTimeout = 600
+  maxNoRaidActivity = 120
+  waitTimer = 30
+  searchMagicShopCount = 0
+  mysticalCount = 0
+  legendaryCount = 0
+  lightDarkCount = 0
+  screenH = 0
+  screenW = 0
+  bottombar = 0
+  sidebar = 0
+  compareW = 0
+  compareH = 0
+  nextFodder = 1
+  fodderX = 1245
+  nonFlatSub = 0
+  runeSubCnt = 0
+  runeSubPercCnt = 0
+  runeDetect = 0.8
+  maxDetect = 0.9
+  rareNum = 0
+  runeRarity6 = 0
+  runeRarity5 = 0
+  runeRarity4 = 0
+  runeRarity3 = 0
+  runeRarity2 = 0
+  runeRarity1 = 0
 end
+
 function defaultTrueFalse ()
-isArenaRival = false
-playSound = false
-playVibrate = false
-stopMaxLevel = false
-isMaxLevel = false
-useFriend = false
-isClickFriend = false
-isUsedAllFriend = false
-sellAllRune = false
-saveAllRune = false
-save6Star = false
-save5Star = false
-save6StarPct = false
-save5StarPct = false
-runMagicShop = false
-runArena = false
-arenaCheck = false
-runGiant = false
-runDragon = false
-runNecro = false
-runHallMagic = false
-runHallLight = false
-runHallDark = false
-runHallFire = false
-runHallWater = false
-runHallWind = false
-runSD = false
-runRiftFire = false
-runRiftIce = false
-runRiftWind = false
-runRiftLight = false
-runRiftDark = false
-runRiftRaid = false
-runChiruka = false
-runRunar = false
-runFerun = false
-runAiden = false
-runFaimon = false
-runVrofagus = false
-runTamor = false
-runHydeni = false
-runTelain = false
-runWhiteRagon = false
-runKabir = false
-runSiz = false
-runGaren = false
-runToa = false
-runLiveArena = false
-runQuickClick = false
-isDungeon = false
-isArena = false
-isScenario = false
-firstCheckMagicShop = true
-immersiveMode = false
-is16by9 = false
-is16by10 = false
-isNavBar = false
-slot8FodderScan = false
-keepLegendary = false
-keepHero = false
-keepRare = false
-keepMagic = false
-keepNormal = false
-keep6Star = false
-keep5Star = false
-keep4Star = false
-keep3Star = false
-keep2Star = false
-keep1Star = false
-keepAll = false
-customKeep = true
-runTestHighlight = false
-keepSpdMain = false
-screenshotSell = false
-screenshotKeep = false
-sellingRune = false
-runRival = false
-runMatchUp = false
+   isArenaRival = false
+   stopMaxLevel = false
+   isMaxLevel = false
+   sellAllRune = false
+   saveAllRune = false
+   save6Star = false
+   save5Star = false
+   save6StarPct = false
+   save5StarPct = false
+   runMagicShop = false
+   runArena = false
+   arenaCheck = false
+   runGiant = false
+   runDragon = false
+   runNecro = false
+   runHallMagic = false
+   runHallLight = false
+   runHallDark = false
+   runHallFire = false
+   runHallWater = false
+   runHallWind = false
+   runSD = false
+   runRiftFire = false
+   runRiftIce = false
+   runRiftWind = false
+   runRiftLight = false
+   runRiftDark = false
+   runRiftRaid = false
+   runChiruka = false
+   runRunar = false
+   runFerun = false
+   runAiden = false
+   runFaimon = false
+   runVrofagus = false
+   runTamor = false
+   runHydeni = false
+   runTelain = false
+   runWhiteRagon = false
+   runKabir = false
+   runSiz = false
+   runGaren = false
+   runToa = false
+   runLiveArena = false
+   runQuickClick = false
+   isDungeon = false
+   isArena = false
+   isScenario = false
+   firstCheckMagicShop = true
+   immersiveMode = false
+   is16by9 = false
+   is16by10 = false
+   isNavBar = false
+   slot8FodderScan = false
+   keepLegendary = false
+   keepHero = false
+   keepRare = false
+   keepMagic = false
+   keepNormal = false
+   keep6Star = false
+   keep5Star = false
+   keep4Star = false
+   keep3Star = false
+   keep2Star = false
+   keep1Star = false
+   keepAll = false
+   customKeep = true
+   runTestHighlight = false
+   keepSpdMain = false
+   screenshotSell = false
+   screenshotKeep = false
+   sellingRune = false
+   runRival = false
+   runMatchUp = false
 end
+
 function defaultRegionLocation ()
   FindEmptyFodderSlotsRegion = Region(1540, 210, 30, 35)
   FindFillFodderSlotsRegion = Region(1502, 210, 30, 35)
@@ -675,8 +672,6 @@ function dialogBox()
   newRow()
   addSpinner("textSize", spinnerTextSize, spinnerTextSize[5])
   addTextView("Text Size    ")
-  addCheckBox("playSound", "Play Sound    ", true)
-  addCheckBox("playVibrate", "Vibrate    ", false)
   addCheckBox("autoUpdate", "Auto Update    ", true)
   newRow()
   addSpinner("noActivityTimeout", spinnerNoActivityTimeout, spinnerNoActivityTimeout[3])
@@ -1523,7 +1518,6 @@ end
 function runLmtCheck()
   if runLmt <= 0 and runNum then
     printBattleMessage()
-    soundVibrate("victory.mp3", false)
     return true
   else
     return false
@@ -1546,19 +1540,6 @@ function clearBattleSlotMax()
     click(battleSlot4Region)
     slot4Max = false
   end
-end
-function clickFriend()
-  if friendSlot1Region:exists(Pattern("stopFriend.png"), 0.1) then
-    isUsedAllFriend = true
-    return false
-  elseif not friendSlot1Region:exists(Pattern("checkMons.png"), 0.1) then
-    click(friendSlot1Region)
-    isClickFriend = true
-    return true
-  else
-    return false
-  end
-  isClickFriend = true
 end
 function StorageFodderEvaluater()
   evaluateStorage = true
@@ -1640,16 +1621,6 @@ function FindEmptyFodderSlots()
     fodderFill = 1
   end
 end
-function fillEmptySlot()
-  if battleSlot2Region:exists(Pattern("emptySlot.png"):similar(.7), 0.1) or battleSlot3Region:exists(Pattern("emptySlot.png"):similar(.7), 0.1) or battleSlot4Region:exists(Pattern("emptySlot.png"):similar(.7), 0.1) then
-    storageIconRegion:existsClick(Pattern("endOfFodderSlot.png"):similar(.7), 0.1)
-    fodderStorageOkRegion:exists(Pattern("ok.png"):similar(.7), 2)
-    FindEmptyFodderSlots()
-    StorageFodderScrollBottom()
-    wait(.5)
-    StorageFodderEvaluater()
-  end
-end
 function isBattleSlotMax()
   slot2MaxRegion:highlight(1)
   if slot2MaxRegion:exists(Pattern("levelDone.png"):similar(maxDetect), 0.1) then
@@ -1671,45 +1642,14 @@ function isBattleSlotMax()
      toast("is max level")
   end
 end
-function replaceEmptyBattleSlot()
-  if slot1BattleRegion:exists(Pattern("emptySlot.png"), 2) and not slot1FriendRegion:exists(Pattern("friendUsed.png"), 2) then
-    click(friend1Location)
-  end
-  if slot2BattleRegion:exists(Pattern("emptySlot.png"), 2) then
-    local a = 10
-    while a > 0 do
-      moveRightMonsterList()
-      a = a - 1
-    end
-    usePreviousSnap(true)
-    if monsterListRegion:exists(Pattern("level1mons.png"), 0.1) then
-      click()
-    end
-    usePreviousSnap(false)
-  end
-end
-function checkMaxLevel()
-  if stopMaxLevel then
-    usePreviousSnap(false)
-    if slot2Max == true then
-      isMaxLevel = true
-    elseif slot3Max == true then
-      isMaxLevel = true
-    elseif slot4Max == true then
-      isMaxLevel = true
-    end
-  end
-end
 function resetTimerNoActivity()
   timerNoActivity:set()
 end
 function checkTimerNoActivity()
   if timerNoActivity:check() > maxNoActivityTimeout then
-    soundVibrate("alarm.mp3", true)
     dialogInit()
     addTextView("No Script Activity.", 14)
     dialogShow("Warning")
-    stopSoundVibrate()
     return true
   else
     return false
@@ -1724,24 +1664,6 @@ function checkMagicShop()
     return true
   else
     return false
-  end
-end
-function soundVibrate(music, isForever)
-  if playSound then
-    playMusic(music, isForever)
-  end
-  local a = 4
-  if playVibrate then
-    while a > 0 do
-      vibrate(1)
-      wait(2)
-      a = a - 1
-    end
-  end
-end
-function stopSoundVibrate()
-  if playSound then
-    stopMusic()
   end
 end
 function findRuneRarity()
@@ -4174,7 +4096,6 @@ while true do
         break
       end
       if isMaxLevel then
-        soundVibrate("victory.mp3", false)
         printBattleMessage()
         print("Max Level Reach!")
         break
@@ -4199,7 +4120,6 @@ while true do
         start()
       else
         printBattleMessage()
-        soundVibrate("defeat.mp3", true)
         break
       end
     end
@@ -4339,7 +4259,7 @@ while true do
           yesRegion:existsClick(Pattern("yes.png"):similar(imgAccuracy * 0.9), 2)
           delayAmt = delayAmt + 1
           if delayAmt > connectionTimeout then
-            soundVibrate("alarm.mp3", true)
+            toast("Delay too long")
             break
           end
           wait(15)
