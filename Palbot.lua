@@ -33,6 +33,8 @@ end
 function defaultValues()
   monX = 0
   monY = 0
+
+  -- run stats
   winCount = 0
   loseCount = 0
   arenaWinCount = 0
@@ -44,17 +46,18 @@ function defaultValues()
   r5Count = 0
   r5Sold = 0
   runeSold = 0
+  riftBattle = 0
+
+  -- default values
   bNum = 10
   delayAmt = 0
-  riftBattle = 0
   scanDelay = 0
   imgAccuracy = 0.7
   runeAccuracy = 0.9
   textSizeNum = 12
-
   waitTimer = 30
 
-  -- no activity
+  -- no activity options
   timerNoActivity = 0
   timerNoRaidActivity = 0
   maxNoActivityTimeout = 600
@@ -68,11 +71,8 @@ function defaultValues()
   sidebar = 0
   compareW = 0
   compareH = 0
-  nextFodder = 1
-  fodderX = 1245
   runeSubCnt = 0
   runeSubPercCnt = 0
-  runeDetect = 0.8
   maxDetect = 0.9
 end
 
@@ -117,7 +117,6 @@ function defaultTrueFalse ()
    runWhiteRagon = false
    runKabir = false
    runSiz = false
-   runGaren = false
    runToa = false
    runLiveArena = false
    runQuickClick = false
@@ -459,7 +458,6 @@ function dialogBox()
     "Mt. White Ragon S2",
     "Kabir Ruins S4",
     "Mt. Siz S2",
-    "Garen Forest S3",
     "------------------------------------------",
     "Toa",
     "Live Arena",
@@ -564,13 +562,11 @@ function setDialogOptions()
   elseif farmLoc == spinnerFarmLoc[32] then
     runSiz = true
   elseif farmLoc == spinnerFarmLoc[33] then
-    runGaren = true
   elseif farmLoc == spinnerFarmLoc[34] then
-  elseif farmLoc == spinnerFarmLoc[35] then
     runTOA = true
-  elseif farmLoc == spinnerFarmLoc[36] then
+  elseif farmLoc == spinnerFarmLoc[35] then
     runLiveArena = true
-  elseif farmLoc == spinnerFarmLoc[37] then
+  elseif farmLoc == spinnerFarmLoc[36] then
     runQuickClick = true
   end
   
@@ -2159,9 +2155,6 @@ function clickScenarioStage()
       wait(2)
       dungeonBattleRegion:existsClick(Pattern("mapStage2.png"):targetOffset(x, y))
     end
-  elseif runGaren and dialogScenarioRegion:existsClick(Pattern("dialogGaren.png"):similar(imgAccuracy), 1) then
-    wait(2)
-    dungeonBattleRegion:existsClick(Pattern("mapStage3.png"):targetOffset(x, y))
   end
 end
 function existsScenario()
@@ -2213,70 +2206,11 @@ function existsScenario()
     if exists(Pattern("mapSiz.png"):similar(imgAccuracy), 1) then
       return true
     end
-  elseif runGaren then
-    if exists(Pattern("mapGaren.png"):similar(imgAccuracy), 1) then
-      return true
-    end
   else
     return false
   end
 end
 function existsDialogScenario()
-  if runChiruka then
-    if dialogScenarioRegion:exists(Pattern("dialogChiruka.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runRunar then
-    if dialogScenarioRegion:exists(Pattern("dialogRunar.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runFerun then
-    if dialogScenarioRegion:exists(Pattern("dialogFerun.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runAiden then
-    if dialogScenarioRegion:exists(Pattern("dialogAiden.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runFaimon then
-    if dialogScenarioRegion:exists(Pattern("dialogFaimon.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runVrofagus then
-    if dialogScenarioRegion:exists(Pattern("dialogVrofagus.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runTamor then
-    if dialogScenarioRegion:exists(Pattern("dialogTamor.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runHydeni then
-    if dialogScenarioRegion:exists(Pattern("dialogHydeni.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runTelain then
-    if dialogScenarioRegion:exists(Pattern("dialogTelain.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runWhiteRagon then
-    if dialogScenarioRegion:exists(Pattern("dialogWhiteRagon.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runKabir then
-    if dialogScenarioRegion:exists(Pattern("dialogKabir.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runSiz then
-    if dialogScenarioRegion:exists(Pattern("dialogSiz.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runGaren then
-    if dialogScenarioRegion:exists(Pattern("dialogGaren.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  else
-    return false
-  end
 end
 function clickScenario()
   if runChiruka then
@@ -2519,27 +2453,6 @@ function clickScenario()
         end
       end
     end
-  elseif runGaren then
-    if exists(Pattern("mapGaren.png"):similar(imgAccuracy), 1) then
-      existsClick(Pattern("mapGaren.png"):similar(imgAccuracy), 0.1)
-    else
-      moveLeft()
-      wait(1)
-      if exists(Pattern("mapGaren.png"):similar(imgAccuracy), 0.1) then
-        existsClick(Pattern("mapGaren.png"):similar(imgAccuracy), 0.1)
-      else
-        moveLeft()
-        wait(1)
-        if exists(Pattern("mapGaren.png"):similar(imgAccuracy), 0.1) then
-          existsClick(Pattern("mapGaren.png"):similar(imgAccuracy), 0.1)
-        else
-          moveLeft()
-          wait(1)
-          existsClick(Pattern("mapGaren.png"):similar(imgAccuracy), 0.1)
-        end
-      end
-    end
-  end
 end
 function findScenario()
   if runChiruka then
@@ -2566,8 +2479,6 @@ function findScenario()
     toast("Finding Kabir Ruins")
   elseif runSiz then
     toast("Finding Mt. Siz")
-  elseif runGaren then
-    toast("Finding Garen Forest")
   else
     return
   end
