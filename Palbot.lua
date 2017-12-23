@@ -1437,8 +1437,19 @@ function setDimension16by10()
   Settings:setScriptDimension(true, screenW)
   Settings:setCompareDimension(true, compareW)
 end
+
+-- used for performance bench
+tmpTimer = Timer()
+function timerReset()
+   tmpTimer:set()
+end
+function timerDone(msg)
+   toast(msg .. tmpTimer:check())
+   tmpTimer:set()
+end
+
 function start()
-  if startRegion:exists(Pattern("start.png"):similar(imgAccuracy), 2) then
+   if startRegion:exists(Pattern("start.png"):similar(imgAccuracy), 2) then
     takeSnapshot()
     if not startDialogRegion:exists(Pattern("startArenaBattle.png"), 0.1) and not startDialogRegion:exists(Pattern("startGiant.png"), 0.1) and not startDialogRegion:exists(Pattern("startDragon.png"), 0.1) and not startDialogRegion:exists(Pattern("startNecro.png"), 0.1) and not startDialogRegion:exists(Pattern("startSD.png"), 0.1) and not startDialogRegion:exists(Pattern("startHall.png"), 0.1) and not startDialogRegion:exists(Pattern("startRaid.png"), 0.1) and not startDialogRegion:exists(Pattern("startRift.png"), 0.1) and not startDialogRegion:exists(Pattern("startToa.png"), 0.1) then
       checkMaxLevel()
