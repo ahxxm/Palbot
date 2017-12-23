@@ -116,7 +116,6 @@ function defaultTrueFalse ()
    runTelain = false
    runWhiteRagon = false
    runKabir = false
-   runSiz = false
    runToa = false
    runLiveArena = false
    runQuickClick = false
@@ -457,7 +456,6 @@ function dialogBox()
     "Telain Forest S1",
     "Mt. White Ragon S2",
     "Kabir Ruins S4",
-    "Mt. Siz S2",
     "------------------------------------------",
     "Toa",
     "Live Arena",
@@ -560,13 +558,11 @@ function setDialogOptions()
   elseif farmLoc == spinnerFarmLoc[31] then
     runKabir = true
   elseif farmLoc == spinnerFarmLoc[32] then
-    runSiz = true
   elseif farmLoc == spinnerFarmLoc[33] then
-  elseif farmLoc == spinnerFarmLoc[34] then
     runTOA = true
-  elseif farmLoc == spinnerFarmLoc[35] then
+  elseif farmLoc == spinnerFarmLoc[34] then
     runLiveArena = true
-  elseif farmLoc == spinnerFarmLoc[36] then
+  elseif farmLoc == spinnerFarmLoc[35] then
     runQuickClick = true
   end
   
@@ -2150,11 +2146,6 @@ function clickScenarioStage()
       wait(2)
       dungeonBattleRegion:existsClick(Pattern("mapStage4.png"):targetOffset(x, y))
     end
-  elseif runSiz then
-    if dialogScenarioRegion:existsClick(Pattern("dialogSiz.png"):similar(imgAccuracy), 1) then
-      wait(2)
-      dungeonBattleRegion:existsClick(Pattern("mapStage2.png"):targetOffset(x, y))
-    end
   end
 end
 function existsScenario()
@@ -2202,10 +2193,7 @@ function existsScenario()
     if exists(Pattern("mapKabir.png"):similar(imgAccuracy), 1) then
       return true
     end
-  elseif runSiz then
-    if exists(Pattern("mapSiz.png"):similar(imgAccuracy), 1) then
-      return true
-    end
+  
   else
     return false
   end
@@ -2433,26 +2421,7 @@ function clickScenario()
         end
       end
     end
-  elseif runSiz then
-    if exists(Pattern("mapSiz.png"), 1) then
-      existsClick(Pattern("mapSiz.png"):similar(imgAccuracy), 0.1)
-    else
-      moveLeft()
-      wait(1)
-      if exists(Pattern("mapSiz.png"):similar(imgAccuracy), 0.1) then
-        existsClick(Pattern("mapSiz.png"):similar(imgAccuracy), 0.1)
-      else
-        moveLeft()
-        wait(1)
-        if exists(Pattern("mapSiz.png"):similar(imgAccuracy), 0.1) then
-          existsClick(Pattern("mapSiz.png"):similar(imgAccuracy), 0.1)
-        else
-          moveLeft()
-          wait(1)
-          existsClick(Pattern("mapSiz.png"):similar(imgAccuracy), 0.1)
-        end
-      end
-    end
+  end
 end
 function findScenario()
   if runChiruka then
@@ -2477,8 +2446,6 @@ function findScenario()
     toast("Finding Mt. White Ragon")
   elseif runKabir then
     toast("Finding Kabir Ruins")
-  elseif runSiz then
-    toast("Finding Mt. Siz")
   else
     return
   end
