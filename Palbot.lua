@@ -96,12 +96,6 @@ isMaxLevel = false
 useFriend = false
 isClickFriend = false
 isUsedAllFriend = false
-isMoveRightFodderList = false
-runAutoSwitchFodder = false
-isSwitchFodderSlot1 = false
-isSwitchFodderSlot2 = false
-isSwitchFodderSlot3 = false
-isSwitchFodderSlot4 = false
 sellAllRune = false
 saveAllRune = false
 save6Star = false
@@ -542,7 +536,6 @@ function dialogBox()
     "22 Runs: Max level 3* fodder",
     "49 Runs: Max level 4* fodder",
     "Stop at Max Level: Slot 2, 3 or 4",
-    "Auto-switch Max Level: Slot 2, 3 and 4  "
   }
   addSpinner("runLmtOption", spinnerBattleLimit, spinnerBattleLimit[1])
   addTextView("  ")
@@ -912,8 +905,6 @@ function setDialogOptions()
     runLmt = 48
   elseif runLmtOption == spinnerBattleLimit[7] then
     stopMaxLevel = true
-  elseif runLmtOption == spinnerBattleLimit[8] then
-    runAutoSwitchFodder = true
   end
   if sellAllRune == false and keepAll == false then
     if runeRaritySelect6 == spinnerRuneRarity6[1] then
@@ -1496,7 +1487,7 @@ function refill()
 end
 function defeated()
   reviveNoRegion:existsClick(Pattern("noRevive.png"):similar(.7), 3)
-  if runAutoSwitchFodder == true or stopMaxLevel == true then
+  if stopMaxLevel == true then
     isBattleSlotMax()
   end
   wait(1)
@@ -1536,17 +1527,6 @@ function runLmtCheck()
     return true
   else
     return false
-  end
-end
-function autoSwitchFodder()
-  if runAutoSwitchFodder then
-    if startRegion:exists(Pattern("start.png"):similar(imgAccuracy), 0.1) then
-      clearBattleSlotMax()
-      fillEmptySlot()
-      return true
-    else
-      return false
-    end
   end
 end
 function clearBattleSlotMax()
@@ -1685,6 +1665,10 @@ function isBattleSlotMax()
   if slot4MaxRegion:exists(Pattern("levelDone.png"):similar(maxDetect), 0.1) then
     slot4Max = true
     toast("Slot4Max")
+  end
+  if slot2Max or slot3Max or slot4Max then
+     isMaxLevel = true
+     toast("is max level")
   end
 end
 function replaceEmptyBattleSlot()
@@ -4180,7 +4164,7 @@ while true do
       runLmt = runLmt - 1
       showBattleResult("Start Battle")
       resetTimerNoActivity()
-      if runAutoSwitchFodder == true or stopMaxLevel == true then
+      if stopMaxLevel == true then
         isBattleSlotMax()
       end
       victory()
