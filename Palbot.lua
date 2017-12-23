@@ -92,13 +92,7 @@ function defaultTrueFalse ()
    runGiant = false
    runDragon = false
    runNecro = false
-   runRiftFire = false
-   runRiftIce = false
-   runRiftWind = false
-   runRiftLight = false
-   runRiftDark = false
    runRiftRaid = false
-   runToa = false
    runLiveArena = false
    runQuickClick = false
    isArena = false
@@ -411,14 +405,8 @@ function dialogBox()
     "Dragon's Lair",
     "Necropolis",
     "------------------------------------------", -- 6
-    "Rift (Fire Beast)",
-    "Rift (Ice Beast)",
-    "Rift (Wind Beast)",
-    "Rift (Light Beast)",
-    "Rift (Dark Beast)",
     "Rift Raid",
-    "------------------------------------------", -- 13
-    "Toa",
+    "------------------------------------------", -- 8
     "Live Arena",
     "Speed QuickClick"
   }
@@ -470,23 +458,11 @@ function setDialogOptions()
     runNecro = true
   elseif farmLoc == spinnerFarmLoc[6] then
   elseif farmLoc == spinnerFarmLoc[7] then
-    runRiftFire = true
-  elseif farmLoc == spinnerFarmLoc[8] then
-    runRiftIce = true
-  elseif farmLoc == spinnerFarmLoc[9] then
-    runRiftWind = true
-  elseif farmLoc == spinnerFarmLoc[10] then
-    runRiftLight = true
-  elseif farmLoc == spinnerFarmLoc[11] then
-    runRiftDark = true
-  elseif farmLoc == spinnerFarmLoc[12] then
     runRiftRaid = true
-  elseif farmLoc == spinnerFarmLoc[13] then
-  elseif farmLoc == spinnerFarmLoc[14] then
-    runTOA = true
-  elseif farmLoc == spinnerFarmLoc[15] then
+  elseif farmLoc == spinnerFarmLoc[8] then
+  elseif farmLoc == spinnerFarmLoc[9] then
     runLiveArena = true
-  elseif farmLoc == spinnerFarmLoc[16] then
+  elseif farmLoc == spinnerFarmLoc[10] then
     runQuickClick = true
   end
   
@@ -1524,36 +1500,6 @@ function enterRift()
   existsClick(Pattern("mapRiftOfWorlds.png"), 3)
   riftYesRegion:existsClick(Pattern("riftYes.png"), 3)
 end
-function clickRiftFire()
-  if existsClick(Pattern("riftFire.png"), 3) then
-    riftBattleRegion:existsClick(Pattern("battle.png"), 3)
-    start()
-  end
-end
-function clickRiftIce()
-  if existsClick(Pattern("riftIce.png"), 3) then
-    riftBattleRegion:existsClick(Pattern("battle.png"), 3)
-    start()
-  end
-end
-function clickRiftWind()
-  if existsClick(Pattern("riftWind.png"), 3) then
-    riftBattleRegion:existsClick(Pattern("battle.png"), 3)
-    start()
-  end
-end
-function clickRiftLight()
-  if existsClick(Pattern("riftLight.png"), 3) then
-    riftBattleRegion:existsClick(Pattern("battle.png"), 3)
-    start()
-  end
-end
-function clickRiftDark()
-  if existsClick(Pattern("riftDark.png"), 3) then
-    riftBattleRegion:existsClick(Pattern("battle.png"), 3)
-    start()
-  end
-end
 function clickRiftRaid()
   if existsClick(Pattern("riftRaid.png"), 3) then
     riftBattleRegion:existsClick(Pattern("battle.png"), 3)
@@ -1561,42 +1507,10 @@ function clickRiftRaid()
   end
 end
 function clickRift()
-  if runRiftFire then
-    clickRiftFire()
-  elseif runRiftIce then
-    clickRiftIce()
-  elseif runRiftWind then
-    clickRiftWind()
-  elseif runRiftLight then
-    clickRiftLight()
-  elseif runRiftDark then
-    clickRiftDark()
-  elseif runRiftRaid then
-    clickRiftRaid()
-  end
+  clickRiftRaid()
 end
 function existsRift()
-  if runRiftFire then
-    if exists(Pattern("riftFire.png"), 3) then
-      return true
-    end
-  elseif runRiftIce then
-    if exists(Pattern("riftIce.png"), 3) then
-      return true
-    end
-  elseif runRiftWind then
-    if exists(Pattern("riftWind.png"), 3) then
-      return true
-    end
-  elseif runRiftLight then
-    if exists(Pattern("riftLight.png"), 3) then
-      return true
-    end
-  elseif runRiftDark then
-    if exists(Pattern("riftDark.png"), 3) then
-      return true
-    end
-  elseif runRiftRaid then
+  if runRiftRaid then
     if exists(Pattern("riftRaid.png"), 3) then
       return true
     end
@@ -1605,17 +1519,7 @@ function existsRift()
   end
 end
 function findRift()
-  if runRiftFire then
-    toast("Finding Rift (Fire Beast)")
-  elseif runRiftIce then
-    toast("Finding Rift (Ice Beast)")
-  elseif runRiftWind then
-    toast("Finding Rift (Wind Beast)")
-  elseif runRiftLight then
-    toast("Finding Rift (Light Beast)")
-  elseif runRiftDark then
-    toast("Finding Rift (Dark Beast)")
-  elseif runRiftRaid then
+  if runRiftRaid then
     toast("Finding Rift (Raid)")
   else
     return
@@ -1715,67 +1619,9 @@ function findRift()
     end
   end
 end
-
 function clickTOAStage()
   if dialogToaRegion:exists(Pattern("dialogTOA.png"):similar(0.7), 1) then
     existsClick(Pattern("toaReady.png"):similar(imgAccuracy * 0.4), 2)
-  end
-end
-function enterTOA()
-  if exists(Pattern("mapTOA.png"):similar(imgAccuracy), 1) then
-    existsClick(Pattern("mapTOA.png"):similar(imgAccuracy), 0.1)
-  else
-    moveLeft()
-    wait(1)
-    if exists(Pattern("mapTOA.png"):similar(imgAccuracy), 0.1) then
-      existsClick(Pattern("mapTOA.png"):similar(imgAccuracy), 0.1)
-    else
-      moveLeft()
-      wait(1)
-      if exists(Pattern("mapTOA.png"):similar(imgAccuracy), 0.1) then
-        existsClick(Pattern("mapTOA.png"):similar(imgAccuracy), 0.1)
-      else
-        moveLeft()
-        wait(1)
-        existsClick(Pattern("mapTOA.png"):similar(imgAccuracy), 0.1)
-      end
-    end
-  end
-end
-function findTOA()
-  if runTOA then
-    toast("Finding Tower of Ascension")
-  else
-    return
-  end
-  if dialogToaRegion:exists(Pattern("dialogTOA.png"):similar(imgAccuracy * 0.9), 0.1) then
-    clickTOAStage()
-  elseif exists(Pattern("mapTOA.png"):similar(imgAccuracy), 1) then
-    enterTOA()
-    clickTOAStage()
-  elseif dropInfoRegion:exists(Pattern("dropInfo.png"):similar(imgAccuracy), 0.1) then
-    closeScenarioDialogBox()
-    enterTOA()
-    clickTOAStage()
-  elseif arenaRankRegion:exists(Pattern("arenaRank.png"):similar(imgAccuracy), 0.1) then
-    closeArenaDialogBox()
-    enterTOA()
-    clickTOAStage()
-  elseif dialogCairoDungeonRegion:exists(Pattern("cairoDungeon.png"):similar(imgAccuracy), 0.1) then
-    closeCairoDungeonDialogBox()
-    enterTOA()
-    clickTOAStage()
-  elseif riftStrategyRegion:exists(Pattern("riftStrategy.png"), 0.1) then
-    closeRiftDialogBox()
-    clickRiftBack()
-    enterTOA()
-    clickTOAStage()
-  elseif riftBackRegion:existsClick(Pattern("back2Button.png"), 3) then
-    enterTOA()
-    clickTOAStage()
-  elseif backButtonRegion:exists(Pattern("backButton.png"):similar(0.8), 0.1) then
-    enterTOA()
-    clickTOAStage()
   end
 end
 function findMap()
@@ -1789,7 +1635,6 @@ end
 function runScenarioDungeon()
   findDungeon()
   findRift()
-  findTOA()
 end
 function runLiveArenaStart()
   while runLiveArena do
@@ -2106,7 +1951,7 @@ while true do
     end
     if notEnoughWingRegion:exists(Pattern("notEnoughWing.png"):similar(.6), 0.1) then
       refillNoRegion:existsClick(Pattern("noPurchase.png"):similar(0.6), 3)
-      if farmLoc == spinnerFarmLoc[19] then
+      if farmLoc == spinnerFarmLoc[7] then
         runRiftRaid = true
         existsClick(Pattern("closeX.png"):similar(.6), 3)
         existsClick(Pattern("back2Button.png"):similar(.6), 3)
