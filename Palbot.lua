@@ -598,13 +598,14 @@ function timerDone(msg)
 end
 
 function start()
+  nocacheSnapshot()
    if startRegion:exists(Pattern("start.png"):similar(imgAccuracy), 2) then
     startRegion:existsClick(Pattern("start.png"):similar(imgAccuracy), 3)
     if noLeaderSkillRegion:exists(Pattern("noLeaderSkill.png"):similar(imgAccuracy), 2) then
       noLeaderSkillYesRegion:existsClick(Pattern("yes.png"):similar(imgAccuracy), 0.1)
     end
   end
-  clearSnapshot()
+  cacheSnapshot()
 end
 function replayOrNext()
   if nextArea then
@@ -647,6 +648,7 @@ function defeated()
   replayRegion:existsClick(Pattern("replay.png"):similar(.7), 3)
 end
 function victory()
+  nocacheSnapshot()
   victoryDiamondRegion:existsClick(Pattern("victoryDiamond.png"):similar(imgAccuracy), 3)
   victoryDiamondRegion:existsClick(Pattern("victoryDiamond.png"):similar(imgAccuracy), 1)
   victoryDiamondRegion:existsClick(Pattern("victoryDiamond.png"):similar(imgAccuracy), 2)
@@ -654,13 +656,14 @@ function victory()
   if not okRegion:existsClick(Pattern("ok.png"):similar(imgAccuracy), 1.5) then
     sellGetRune()
   end
+  cacheSnapshot()
 end
-function takeSnapshot()
+function cacheSnapshot()
   usePreviousSnap(false)
   startRegion:exists(Pattern("start.png"), 0.1)
   usePreviousSnap(true)
 end
-function clearSnapshot()
+function nocacheSnapshot()
   usePreviousSnap(false)
 end
 function clearBattleSlotMax()
@@ -1056,15 +1059,19 @@ function arenaVictory()
   arenaRivalDialogRegion:existsClick(Pattern("arenaRivalDialog.png"), 2)
 end
 function arenaDefeat()
+  nocacheSnapshot()
   toast("Arena defeated")
   victoryDefeatRegion:existsClick(Pattern("defeat.png"):similar(imgAccuracy), 2)
   victoryDefeatRegion:existsClick(Pattern("defeat.png"):similar(imgAccuracy), 2)
   arenaRivalDialogRegion:existsClick(Pattern("arenaRivalDialog.png"), 2)
+  cacheSnapshot()
 end
 function refreshList()
+  nocacheSnapshot()
   toast("Refreshing list")
   refreshListRegion:existsClick(Pattern("refreshList.png"), 2)
   refreshList2Region:existsClick(Pattern("refreshList2.png"):similar(imgAccuracy * 0.8), 2)
+  cacheSnapshot()
 end
 function existsArenaRival()
   if runRival == true then
@@ -1088,6 +1095,7 @@ function waitClickArenaRival()
   end
 end
 function arenaBattle()
+  nocacheSnapshot()
   existsArenaRival()
   if arenaWingRegion:exists(Pattern("wing.png"):similar(imgAccuracy), 2) then
     arenaWingRegion:existsClick(Pattern("wing.png"):similar(imgAccuracy), 2)
@@ -1171,6 +1179,7 @@ function arenaBattle()
       end
     end
   end
+  cacheSnapshot()
 end
 function liveArenaSelectMon(choice)
   if not slot2Region:exists(Pattern("liveArenaNotSelectable.png"):similar(0.5), 0.1) and not slot2Region:exists(Pattern("liveArenaCheck.png"), 0.1) then
@@ -2308,7 +2317,7 @@ while true do
   elseif runLiveArena == true then
     runLiveArenaStart()
   elseif not runLiveArena or not runQuickClick or not runRiftRaid then
-    takeSnapshot()
+    cacheSnapshot()
     if startRegion:exists(Pattern("start.png"):similar(imgAccuracy), 0.1) then
       start()
     end
@@ -2492,7 +2501,7 @@ while true do
     if battleIconRegion:existsClick(Pattern("iconBattle.png"), 0.1) then
       findMap()
     end
-    clearSnapshot()
+    nocacheSnapshot()
   end
   wait(scanDelay)
 end
