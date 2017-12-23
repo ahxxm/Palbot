@@ -92,12 +92,6 @@ function defaultTrueFalse ()
    runGiant = false
    runDragon = false
    runNecro = false
-   runHallMagic = false
-   runHallLight = false
-   runHallDark = false
-   runHallFire = false
-   runHallWater = false
-   runHallWind = false
    runRiftFire = false
    runRiftIce = false
    runRiftWind = false
@@ -416,20 +410,14 @@ function dialogBox()
     "Giant's Keep",
     "Dragon's Lair",
     "Necropolis",
-    "Hall of Magic",
-    "Hall of Light",
-    "Hall of Dark",
-    "Hall of Fire",
-    "Hall of Water",
-    "Hall of Wind",
-    "------------------------------------------", -- 12
+    "------------------------------------------", -- 6
     "Rift (Fire Beast)",
     "Rift (Ice Beast)",
     "Rift (Wind Beast)",
     "Rift (Light Beast)",
     "Rift (Dark Beast)",
     "Rift Raid",
-    "------------------------------------------", -- 19
+    "------------------------------------------", -- 13
     "Toa",
     "Live Arena",
     "Speed QuickClick"
@@ -481,36 +469,24 @@ function setDialogOptions()
   elseif farmLoc == spinnerFarmLoc[5] then
     runNecro = true
   elseif farmLoc == spinnerFarmLoc[6] then
-    runHallMagic = true
   elseif farmLoc == spinnerFarmLoc[7] then
-    runHallLight = true
-  elseif farmLoc == spinnerFarmLoc[8] then
-    runHallDark = true
-  elseif farmLoc == spinnerFarmLoc[9] then
-    runHallFire = true
-  elseif farmLoc == spinnerFarmLoc[10] then
-    runHallWater = true
-  elseif farmLoc == spinnerFarmLoc[11] then
-    runHallWind = true
-  elseif farmLoc == spinnerFarmLoc[12] then
-  elseif farmLoc == spinnerFarmLoc[13] then
     runRiftFire = true
-  elseif farmLoc == spinnerFarmLoc[14] then
+  elseif farmLoc == spinnerFarmLoc[8] then
     runRiftIce = true
-  elseif farmLoc == spinnerFarmLoc[15] then
+  elseif farmLoc == spinnerFarmLoc[9] then
     runRiftWind = true
-  elseif farmLoc == spinnerFarmLoc[16] then
+  elseif farmLoc == spinnerFarmLoc[10] then
     runRiftLight = true
-  elseif farmLoc == spinnerFarmLoc[17] then
+  elseif farmLoc == spinnerFarmLoc[11] then
     runRiftDark = true
-  elseif farmLoc == spinnerFarmLoc[18] then
+  elseif farmLoc == spinnerFarmLoc[12] then
     runRiftRaid = true
-  elseif farmLoc == spinnerFarmLoc[19] then
-  elseif farmLoc == spinnerFarmLoc[20] then
+  elseif farmLoc == spinnerFarmLoc[13] then
+  elseif farmLoc == spinnerFarmLoc[14] then
     runTOA = true
-  elseif farmLoc == spinnerFarmLoc[21] then
+  elseif farmLoc == spinnerFarmLoc[15] then
     runLiveArena = true
-  elseif farmLoc == spinnerFarmLoc[22] then
+  elseif farmLoc == spinnerFarmLoc[16] then
     runQuickClick = true
   end
   
@@ -1424,18 +1400,6 @@ function clickNecroB10()
     end
   end
 end
-function clickSD()
-  if dungeonListRegion:existsClick(Pattern("mapSD.png"):similar(imgAccuracy), 1) then
-    wait(2)
-    if sdChargeRegion:exists(Pattern("sdCharge.png"), 1) then
-        sdChargeRegion:existsClick(Pattern("sdCharge.png"), 1)
-    elseif dungeonListRegion:exists(Pattern("mapSD.png"):similar(imgAccuracy), 1) then
-        keyevent(4)
-        toast("Couldn't find B"..bNum..", going back")
-        findDungeon()
-    end
-  end
-end
 function clickDungeon()
   if runGiant then
     clickGiantB10()
@@ -1472,6 +1436,8 @@ function findDungeon()
   else
     return
   end
+
+  -- on list
   if existsDungeon() then
     clickDungeon()
   elseif dungeonListRegion:exists(Pattern("mapHallofMagic.png"):similar(imgAccuracy), 0.1) then
@@ -1482,6 +1448,7 @@ function findDungeon()
     wait(1)
     moveUpList()
     clickDungeon()
+    -- somewhere else
   elseif arenaRankRegion:exists(Pattern("arenaRank.png"):similar(imgAccuracy), 0.1) then
     closeArenaDialogBox()
     existsClick(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 1)
@@ -1552,210 +1519,7 @@ function findDungeon()
     end
   end
 end
-function clickHallofMagicB10()
-  if dungeonListRegion:existsClick(Pattern("mapHallofMagic.png"):similar(imgAccuracy), 1) then
-    wait(2)
-    dragDrop(Location(1200, 835), Location(1200, 320))
-    wait(1)
-    dragDrop(Location(1200, 835), Location(1200, 320))
-    dungeonBattleRegion:click(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
-  end
-end
-function clickHallofLightB10()
-  if dungeonListRegion:existsClick(Pattern("mapHallofLight.png"):similar(imgAccuracy), 1) then
-    wait(2)
-    dragDrop(Location(1200, 835), Location(1200, 320))
-    wait(1)
-    dragDrop(Location(1200, 835), Location(1200, 320))
-    dungeonBattleRegion:click(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
-  end
-end
-function clickHallofDarkB10()
-  if dungeonListRegion:existsClick(Pattern("mapHallofDark.png"):similar(imgAccuracy), 1) then
-    wait(2)
-    dragDrop(Location(1200, 835), Location(1200, 320))
-    wait(1)
-    dragDrop(Location(1200, 835), Location(1200, 320))
-    dungeonBattleRegion:click(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
-  end
-end
-function clickHallofFireB10()
-  if dungeonListRegion:existsClick(Pattern("mapHallofFire.png"):similar(imgAccuracy), 1) then
-    wait(2)
-    dragDrop(Location(1200, 835), Location(1200, 320))
-    wait(1)
-    dragDrop(Location(1200, 835), Location(1200, 320))
-    dungeonBattleRegion:click(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
-  end
-end
-function clickHallofWaterB10()
-  if dungeonListRegion:existsClick(Pattern("mapHallofWater.png"):similar(imgAccuracy), 1) then
-    wait(2)
-    dragDrop(Location(1200, 835), Location(1200, 320))
-    wait(1)
-    dragDrop(Location(1200, 835), Location(1200, 320))
-    dungeonBattleRegion:click(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
-  end
-end
-function clickHallofWindB10()
-  if dungeonListRegion:existsClick(Pattern("mapHallofWind.png"):similar(imgAccuracy), 1) then
-    wait(2)
-    dragDrop(Location(1200, 835), Location(1200, 320))
-    wait(1)
-    dragDrop(Location(1200, 835), Location(1200, 320))
-    dungeonBattleRegion:click(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
-  end
-end
-function clickHallB10()
-  if runHallMagic then
-    clickHallofMagicB10()
-  elseif runHallLight then
-    clickHallofLightB10()
-  elseif runHallDark then
-    clickHallofDarkB10()
-  elseif runHallFire then
-    clickHallofFireB10()
-  elseif runHallWater then
-    clickHallofWaterB10()
-  elseif runHallWind then
-    clickHallofWindB10()
-  end
-end
-function existsHallB10()
-  if runHallMagic then
-    if dungeonListRegion:exists(Pattern("mapHallofMagic.png"), 0.1) then
-      return true
-    end
-  elseif runHallLight then
-    if dungeonListRegion:exists(Pattern("mapHallofLight.png"), 0.1) then
-      return true
-    end
-  elseif runHallDark then
-    if dungeonListRegion:exists(Pattern("mapHallofDark.png"), 0.1) then
-      return true
-    end
-  elseif runHallFire then
-    if dungeonListRegion:exists(Pattern("mapHallofFire.png"), 0.1) then
-      return true
-    end
-  elseif runHallWater then
-    if dungeonListRegion:exists(Pattern("mapHallofWater.png"), 0.1) then
-      return true
-    end
-  elseif runHallWind then
-    if dungeonListRegion:exists(Pattern("mapHallofWind.png"), 0.1) then
-      return true
-    end
-  else
-    return false
-  end
-end
-function findHallB10()
-  if runHallMagic then
-    toast("Finding Halls of Magic")
-  elseif runHallLight then
-    toast("Finding Halls of Light")
-  elseif runHallDark then
-    toast("Finding Halls of Dark")
-  elseif runHallFire then
-    toast("Finding Halls of Fire")
-  elseif runHallWater then
-    toast("Finding Halls of Water")
-  elseif runHallWind then
-    toast("Finding Halls of Wind")
-  else
-    return
-  end
-  if existsHallB10() then
-    clickHallB10()
-  elseif dungeonListRegion:exists(Pattern("mapDragonsLair.png"):similar(imgAccuracy), 0.1) then
-    moveDownList()
-    clickHallB10()
-  elseif dungeonListRegion:exists(Pattern("mapHallOfWind.png"):similar(imgAccuracy), 0.1) then
-    moveUpList()
-    clickHallB10()
-  elseif arenaRankRegion:exists(Pattern("arenaRank.png"):similar(imgAccuracy), 0.1) then
-    closeArenaDialogBox()
-    existsClick(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 1)
-    wait(1)
-    moveDownList()
-    clickHallB10()
-  elseif exists(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 0.1) then
-    existsClick(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 1)
-    wait(1)
-    moveDownList()
-    clickHallB10()
-  elseif dropInfoRegion:exists(Pattern("dropInfo.png"):similar(imgAccuracy), 0.1) then
-    closeScenarioDialogBox()
-    moveLeft()
-    if exists(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 0.1) then
-      existsClick(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 1)
-      wait(1)
-      moveDownList()
-      clickHallB10()
-    else
-      moveLeft()
-      if exists(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 0.1) then
-        existsClick(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 1)
-        wait(1)
-        moveDownList()
-        clickHallB10()
-      end
-    end
-  elseif riftStrategyRegion:exists(Pattern("riftStrategy.png"), 0.1) then
-    closeRiftDialogBox()
-    clickRiftBack()
-    wait(1)
-    moveLeft()
-    if exists(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 0.1) then
-      clickHallB10()
-    else
-      moveLeft()
-      if exists(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 0.1) then
-        clickHallB10()
-      end
-    end
-  elseif riftBackRegion:existsClick(Pattern("back2Button.png"), 3) then
-    moveLeft()
-    if exists(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 0.1) then
-      clickHallB10()
-    else
-      moveLeft()
-      if exists(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 0.1) then
-        clickHallB10()
-      end
-    end
-  elseif dialogToaRegion:exists(Pattern("dialogTOA.png"):similar(imgAccuracy), 0.1) then
-    closeToaDialogBox()
-    if exists(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 0.1) then
-      clickHallB10()
-    else
-      moveLeft()
-      if exists(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 0.1) then
-        clickHallB10()
-      else
-        moveLeft()
-        clickHallB10()
-      end
-    end
-  elseif backButtonRegion:exists(Pattern("backButton.png"):similar(0.8), 0.1) then
-    moveLeft()
-    if exists(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 0.1) then
-      existsClick(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 1)
-      wait(1)
-      moveDownList()
-      clickHallB10()
-    else
-      moveLeft()
-      if exists(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 0.1) then
-        existsClick(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 1)
-        wait(1)
-        moveDownList()
-        clickHallB10()
-      end
-    end
-  end
-end
+
 function enterRift()
   existsClick(Pattern("mapRiftOfWorlds.png"), 3)
   riftYesRegion:existsClick(Pattern("riftYes.png"), 3)
@@ -2024,7 +1788,6 @@ function findMap()
 end
 function runScenarioDungeon()
   findDungeon()
-  findHallB10()
   findRift()
   findTOA()
 end
