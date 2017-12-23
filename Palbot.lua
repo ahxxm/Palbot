@@ -105,23 +105,10 @@ function defaultTrueFalse ()
    runRiftLight = false
    runRiftDark = false
    runRiftRaid = false
-   runChiruka = false
-   runRunar = false
-   runFerun = false
-   runAiden = false
-   runFaimon = false
-   runVrofagus = false
-   runTamor = false
-   runHydeni = false
-   runTelain = false
-   runWhiteRagon = false
-   runKabir = false
    runToa = false
    runLiveArena = false
    runQuickClick = false
-   isDungeon = false
    isArena = false
-   isScenario = false
    immersiveMode = false
    is16by9 = false
    is16by10 = false
@@ -426,7 +413,7 @@ function dialogBox()
   dialogInit()
   spinnerFarmLoc = {
     "Current Battle",
-    "------------------------------------------",
+    "------------------------------------------", -- 2
     "Giant's Keep",
     "Dragon's Lair",
     "Necropolis",
@@ -437,26 +424,14 @@ function dialogBox()
     "Hall of Water",
     "Hall of Wind",
     "Secret Dungeon 1st",
-    "------------------------------------------",
+    "------------------------------------------", -- 13
     "Rift (Fire Beast)",
     "Rift (Ice Beast)",
     "Rift (Wind Beast)",
     "Rift (Light Beast)",
     "Rift (Dark Beast)",
     "Rift Raid",
-    "------------------------------------------",
-    "Chiruka Remains S1",
-    "Mt. Runar S2",
-    "Ferun Castle S1",
-    "Aiden Forest S1",
-    "Faimon Volcano S1",
-    "Vrofagus Ruins S4",
-    "Tamor Desert S3",
-    "Hydeni Ruins S5",
-    "Telain Forest S1",
-    "Mt. White Ragon S2",
-    "Kabir Ruins S4",
-    "------------------------------------------",
+    "------------------------------------------", -- 20
     "Toa",
     "Live Arena",
     "Speed QuickClick"
@@ -536,33 +511,10 @@ function setDialogOptions()
     runRiftRaid = true
   elseif farmLoc == spinnerFarmLoc[20] then
   elseif farmLoc == spinnerFarmLoc[21] then
-    runChiruka = true
-  elseif farmLoc == spinnerFarmLoc[22] then
-    runRunar = true
-  elseif farmLoc == spinnerFarmLoc[23] then
-    runFerun = true
-  elseif farmLoc == spinnerFarmLoc[24] then
-    runAiden = true
-  elseif farmLoc == spinnerFarmLoc[25] then
-    runFaimon = true
-  elseif farmLoc == spinnerFarmLoc[26] then
-    runVrofagus = true
-  elseif farmLoc == spinnerFarmLoc[27] then
-    runTamor = true
-  elseif farmLoc == spinnerFarmLoc[28] then
-    runHydeni = true
-  elseif farmLoc == spinnerFarmLoc[29] then
-    runTelain = true
-  elseif farmLoc == spinnerFarmLoc[30] then
-    runWhiteRagon = true
-  elseif farmLoc == spinnerFarmLoc[31] then
-    runKabir = true
-  elseif farmLoc == spinnerFarmLoc[32] then
-  elseif farmLoc == spinnerFarmLoc[33] then
     runTOA = true
-  elseif farmLoc == spinnerFarmLoc[34] then
+  elseif farmLoc == spinnerFarmLoc[22] then
     runLiveArena = true
-  elseif farmLoc == spinnerFarmLoc[35] then
+  elseif farmLoc == spinnerFarmLoc[23] then
     runQuickClick = true
   end
   
@@ -710,14 +662,6 @@ function takeSnapshot()
 end
 function clearSnapshot()
   usePreviousSnap(false)
-end
-function setAsDungeon()
-  isDungeon = true
-  isScenario = false
-end
-function setAsScenario()
-  isDungeon = false
-  isScenario = true
 end
 function clearBattleSlotMax()
   usePreviousSnap(false)
@@ -1089,9 +1033,6 @@ function setScriptMovement()
   end
   function moveLeftSelectList()
     swipe(Location(75, 675), Location(1160, 675))
-  end
-  function moveScenarioDown()
-    swipe(Location(1500, 800), Location(1500, 350))
   end
   function moveRightFodderList()
     swipe(Location(1215, 740), Location(100, 740))
@@ -2086,404 +2027,7 @@ function findRift()
     end
   end
 end
-function clickScenarioStage()
-  local x = 705
-  local y = 42
-  if runChiruka then
-    if dialogScenarioRegion:existsClick(Pattern("dialogChiruka.png"):similar(imgAccuracy), 1) then
-      wait(2)
-      dungeonBattleRegion:existsClick(Pattern("mapStage1.png"):targetOffset(x, y))
-    end
-  elseif runRunar then
-    if dialogScenarioRegion:existsClick(Pattern("dialogRunar.png"):similar(imgAccuracy), 1) then
-      wait(2)
-      dungeonBattleRegion:existsClick(Pattern("mapStage2.png"):targetOffset(x, y))
-    end
-  elseif runFerun then
-    if dialogScenarioRegion:existsClick(Pattern("dialogFerun.png"):similar(imgAccuracy), 1) then
-      wait(2)
-      dungeonBattleRegion:existsClick(Pattern("mapStage1.png"):targetOffset(x, y))
-    end
-  elseif runAiden then
-    if dialogScenarioRegion:existsClick(Pattern("dialogAiden.png"):similar(imgAccuracy), 1) then
-      wait(2)
-      dungeonBattleRegion:existsClick(Pattern("mapStage1.png"):targetOffset(x, y))
-    end
-  elseif runFaimon then
-    if dialogScenarioRegion:existsClick(Pattern("dialogFaimon.png"):similar(imgAccuracy), 1) then
-      wait(2)
-      dungeonBattleRegion:existsClick(Pattern("mapStage1.png"):targetOffset(x, y))
-    end
-  elseif runVrofagus then
-    if dialogScenarioRegion:existsClick(Pattern("dialogVrofagus.png"):similar(imgAccuracy), 1) then
-      wait(2)
-      dungeonBattleRegion:existsClick(Pattern("mapStage4.png"):targetOffset(x, y))
-    end
-  elseif runTamor then
-    if dialogScenarioRegion:existsClick(Pattern("dialogTamor.png"):similar(imgAccuracy), 1) then
-      wait(2)
-      dungeonBattleRegion:existsClick(Pattern("mapStage3.png"):targetOffset(x, y))
-    end
-  elseif runHydeni then
-    if dialogScenarioRegion:existsClick(Pattern("dialogHydeni.png"):similar(imgAccuracy), 1) then
-      wait(1)
-      moveScenarioDown()
-      wait(2)
-      dungeonBattleRegion:existsClick(Pattern("mapStage5.png"):targetOffset(x, y))
-    end
-  elseif runTelain then
-    if dialogScenarioRegion:existsClick(Pattern("dialogTelain.png"):similar(imgAccuracy), 1) then
-      wait(2)
-      dungeonBattleRegion:existsClick(Pattern("mapStage1.png"):targetOffset(x, y))
-    end
-  elseif runWhiteRagon then
-    if dialogScenarioRegion:existsClick(Pattern("dialogWhiteRagon.png"):similar(imgAccuracy), 1) then
-      wait(2)
-      dungeonBattleRegion:existsClick(Pattern("mapStage2.png"):targetOffset(x, y))
-    end
-  elseif runKabir then
-    if dialogScenarioRegion:existsClick(Pattern("dialogKabir.png"):similar(imgAccuracy), 1) then
-      wait(2)
-      dungeonBattleRegion:existsClick(Pattern("mapStage4.png"):targetOffset(x, y))
-    end
-  end
-end
-function existsScenario()
-  if runChiruka then
-    if exists(Pattern("mapChiruka.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runRunar then
-    if exists(Pattern("mapRunar.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runFerun then
-    if exists(Pattern("mapFerun.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runAiden then
-    if exists(Pattern("mapAiden.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runFaimon then
-    if exists(Pattern("mapFaimon.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runVrofagus then
-    if exists(Pattern("mapVrofagus.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runTamor then
-    if exists(Pattern("mapTamor.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runHydeni then
-    if exists(Pattern("mapHydeni.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runTelain then
-    if exists(Pattern("mapTelain.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runWhiteRagon then
-    if exists(Pattern("mapWhiteRagon.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  elseif runKabir then
-    if exists(Pattern("mapKabir.png"):similar(imgAccuracy), 1) then
-      return true
-    end
-  
-  else
-    return false
-  end
-end
-function existsDialogScenario()
-end
-function clickScenario()
-  if runChiruka then
-    if exists(Pattern("mapChiruka.png"):similar(imgAccuracy), 1) then
-      existsClick(Pattern("mapChiruka.png"):similar(imgAccuracy), 0.1)
-    else
-      moveRight()
-      wait(1)
-      if exists(Pattern("mapChiruka.png"):similar(imgAccuracy), 0.1) then
-        existsClick(Pattern("mapChiruka.png"):similar(imgAccuracy), 0.1)
-      else
-        moveRight()
-        wait(1)
-        if exists(Pattern("mapChiruka.png"):similar(imgAccuracy), 0.1) then
-          existsClick(Pattern("mapChiruka.png"):similar(imgAccuracy), 0.1)
-        else
-          moveRight()
-          wait(1)
-          existsClick(Pattern("mapChiruka.png"):similar(imgAccuracy), 0.1)
-        end
-      end
-    end
-  elseif runRunar then
-    if exists(Pattern("mapRunar.png"):similar(imgAccuracy), 1) then
-      existsClick(Pattern("mapRunar.png"):similar(imgAccuracy), 0.1)
-    else
-      moveRight()
-      wait(1)
-      if exists(Pattern("mapRunar.png"):similar(imgAccuracy), 0.1) then
-        existsClick(Pattern("mapRunar.png"):similar(imgAccuracy), 0.1)
-      else
-        moveRight()
-        wait(1)
-        if exists(Pattern("mapRunar.png"):similar(imgAccuracy), 0.1) then
-          existsClick(Pattern("mapRunar.png"):similar(imgAccuracy), 0.1)
-        else
-          moveRight()
-          wait(1)
-          existsClick(Pattern("mapRunar.png"):similar(imgAccuracy), 0.1)
-        end
-      end
-    end
-  elseif runFerun then
-    if exists(Pattern("mapFerun.png"):similar(imgAccuracy), 1) then
-      existsClick(Pattern("mapFerun.png"):similar(imgAccuracy), 0.1)
-    else
-      moveRight()
-      wait(1)
-      if exists(Pattern("mapFerun.png"):similar(imgAccuracy), 0.1) then
-        existsClick(Pattern("mapFerun.png"):similar(imgAccuracy), 0.1)
-      else
-        moveRight()
-        wait(1)
-        if exists(Pattern("mapFerun.png"):similar(imgAccuracy), 0.1) then
-          existsClick(Pattern("mapFerun.png"):similar(imgAccuracy), 0.1)
-        else
-          moveRight()
-          wait(1)
-          existsClick(Pattern("mapFerun.png"):similar(imgAccuracy), 0.1)
-        end
-      end
-    end
-  elseif runAiden then
-    if exists(Pattern("mapAiden.png"):similar(imgAccuracy), 1) then
-      existsClick(Pattern("mapAiden.png"):similar(imgAccuracy), 0.1)
-    else
-      moveRight()
-      wait(1)
-      if exists(Pattern("mapAiden.png"):similar(imgAccuracy), 0.1) then
-        existsClick(Pattern("mapAiden.png"):similar(imgAccuracy), 0.1)
-      else
-        moveRight()
-        wait(1)
-        if exists(Pattern("mapAiden.png"):similar(imgAccuracy), 0.1) then
-          existsClick(Pattern("mapAiden.png"):similar(imgAccuracy), 0.1)
-        else
-          moveRight()
-          wait(1)
-          existsClick(Pattern("mapAiden.png"):similar(imgAccuracy), 0.1)
-        end
-      end
-    end
-  elseif runFaimon then
-    if exists(Pattern("mapFaimon.png"):similar(imgAccuracy), 1) then
-      existsClick(Pattern("mapFaimon.png"):similar(imgAccuracy), 0.1)
-    else
-      moveRight()
-      wait(1)
-      if exists(Pattern("mapFaimon.png"):similar(imgAccuracy), 0.1) then
-        existsClick(Pattern("mapFaimon.png"):similar(imgAccuracy), 0.1)
-      else
-        moveRight()
-        wait(1)
-        if exists(Pattern("mapFaimon.png"):similar(imgAccuracy), 0.1) then
-          existsClick(Pattern("mapFaimon.png"):similar(imgAccuracy), 0.1)
-        else
-          moveLeft()
-          wait(1)
-          existsClick(Pattern("mapFaimon.png"):similar(imgAccuracy), 0.1)
-        end
-      end
-    end
-  elseif runVrofagus then
-    if exists(Pattern("mapVrofagus.png"):similar(imgAccuracy), 1) then
-      existsClick(Pattern("mapVrofagus.png"):similar(imgAccuracy), 0.1)
-    else
-      moveRight()
-      wait(1)
-      if exists(Pattern("mapVrofagus.png"):similar(imgAccuracy), 0.1) then
-        existsClick(Pattern("mapVrofagus.png"):similar(imgAccuracy), 0.1)
-      else
-        moveRight()
-        wait(1)
-        if exists(Pattern("mapVrofagus.png"):similar(imgAccuracy), 0.1) then
-          existsClick(Pattern("mapVrofagus.png"):similar(imgAccuracy), 0.1)
-        else
-          moveLeft()
-          wait(1)
-          existsClick(Pattern("mapVrofagus.png"):similar(imgAccuracy), 0.1)
-        end
-      end
-    end
-  elseif runTamor then
-    if exists(Pattern("mapTamor.png"):similar(imgAccuracy), 1) then
-      existsClick(Pattern("mapTamor.png"):similar(imgAccuracy), 0.1)
-    else
-      moveRight()
-      wait(1)
-      if exists(Pattern("mapTamor.png"):similar(imgAccuracy), 0.1) then
-        existsClick(Pattern("mapTamor.png"):similar(imgAccuracy), 0.1)
-      else
-        moveRight()
-        wait(1)
-        if exists(Pattern("mapTamor.png"):similar(imgAccuracy), 0.1) then
-          existsClick(Pattern("mapTamor.png"):similar(imgAccuracy), 0.1)
-        else
-          moveLeft()
-          wait(1)
-          existsClick(Pattern("mapTamor.png"):similar(imgAccuracy), 0.1)
-        end
-      end
-    end
-  elseif runHydeni then
-    if exists(Pattern("mapHydeni.png"):similar(imgAccuracy), 1) then
-      existsClick(Pattern("mapHydeni.png"):similar(imgAccuracy), 0.1)
-    else
-      moveLeft()
-      wait(1)
-      if exists(Pattern("mapHydeni.png"):similar(imgAccuracy), 0.1) then
-        existsClick(Pattern("mapHydeni.png"):similar(imgAccuracy), 0.1)
-      else
-        moveLeft()
-        wait(1)
-        if exists(Pattern("mapHydeni.png"):similar(imgAccuracy), 0.1) then
-          existsClick(Pattern("mapHydeni.png"):similar(imgAccuracy), 0.1)
-        else
-          moveLeft()
-          wait(1)
-          existsClick(Pattern("mapHydeni.png"):similar(imgAccuracy), 0.1)
-        end
-      end
-    end
-  elseif runTelain then
-    if exists(Pattern("mapTelain.png"):similar(imgAccuracy), 1) then
-      existsClick(Pattern("mapTelain.png"):similar(imgAccuracy), 0.1)
-    else
-      moveLeft()
-      wait(1)
-      if exists(Pattern("mapTelain.png"):similar(imgAccuracy), 0.1) then
-        existsClick(Pattern("mapTelain.png"):similar(imgAccuracy), 0.1)
-      else
-        moveLeft()
-        wait(1)
-        if exists(Pattern("mapTelain.png"):similar(imgAccuracy), 0.1) then
-          existsClick(Pattern("mapTelain.png"):similar(imgAccuracy), 0.1)
-        else
-          moveLeft()
-          wait(1)
-          existsClick(Pattern("mapTelain.png"):similar(imgAccuracy), 0.1)
-        end
-      end
-    end
-  elseif runWhiteRagon then
-    if exists(Pattern("mapWhiteRagon.png"):similar(imgAccuracy), 1) then
-      existsClick(Pattern("mapWhiteRagon.png"):similar(imgAccuracy), 0.1)
-    else
-      moveLeft()
-      wait(1)
-      if exists(Pattern("mapWhiteRagon.png"):similar(imgAccuracy), 0.1) then
-        existsClick(Pattern("mapWhiteRagon.png"):similar(imgAccuracy), 0.1)
-      else
-        moveLeft()
-        wait(1)
-        if exists(Pattern("mapWhiteRagon.png"):similar(imgAccuracy), 0.1) then
-          existsClick(Pattern("mapWhiteRagon.png"):similar(imgAccuracy), 0.1)
-        else
-          moveLeft()
-          wait(1)
-          existsClick(Pattern("mapWhiteRagon.png"):similar(imgAccuracy), 0.1)
-        end
-      end
-    end
-  elseif runKabir then
-    if exists(Pattern("mapKabir.png"):similar(imgAccuracy), 1) then
-      existsClick(Pattern("mapKabir.png"):similar(imgAccuracy), 0.1)
-    else
-      moveLeft()
-      wait(1)
-      if exists(Pattern("mapKabir.png"):similar(imgAccuracy), 0.1) then
-        existsClick(Pattern("mapKabir.png"):similar(imgAccuracy), 0.1)
-      else
-        moveLeft()
-        wait(1)
-        if exists(Pattern("mapKabir.png"):similar(imgAccuracy), 0.1) then
-          existsClick(Pattern("mapKabir.png"):similar(imgAccuracy), 0.1)
-        else
-          moveLeft()
-          wait(1)
-          existsClick(Pattern("mapKabir.png"):similar(imgAccuracy), 0.1)
-        end
-      end
-    end
-  end
-end
-function findScenario()
-  if runChiruka then
-    toast("Finding Chiruka Remains")
-  elseif runRunar then
-    toast("Finding Mt. Runar")
-  elseif runFerun then
-    toast("Finding Ferun Castle")
-  elseif runAiden then
-    toast("Finding Aiden Forest")
-  elseif runFaimon then
-    toast("Finding Faimon Volcano")
-  elseif runVrofagus then
-    toast("Finding Vrofagus Ruins")
-  elseif runTamor then
-    toast("Finding Tamor Desert")
-  elseif runHydeni then
-    toast("Finding Hydeni Runis")
-  elseif runTelain then
-    toast("Finding Telain Forest")
-  elseif runWhiteRagon then
-    toast("Finding Mt. White Ragon")
-  elseif runKabir then
-    toast("Finding Kabir Ruins")
-  else
-    return
-  end
-  if existsDialogScenario() then
-    clickScenarioStage()
-  elseif dropInfoRegion:exists(Pattern("dropInfo.png"):similar(imgAccuracy), 0.1) then
-  	toast("Drop info close")
-    closeDialogScenarioRegion:existsClick(Pattern("closeX.png"):similar(imgAccuracy), 2)
-    clickScenario()
-    clickScenarioStage()
-  elseif arenaRankRegion:exists(Pattern("arenaRank.png"):similar(imgAccuracy), 0.1) then
-	closeArenaDialogBox()
-    clickScenario()
-    clickScenarioStage()
-  elseif existsScenario() then
-    clickScenario()
-    clickScenarioStage()
-  elseif dialogCairoDungeonRegion:exists(Pattern("cairoDungeon.png"):similar(imgAccuracy), 0.1) then
-    closeCairoDungeonDialogBox()
-    clickScenario()
-    clickScenarioStage()
-  elseif riftStrategyRegion:exists(Pattern("riftStrategy.png"), 0.1) then
-    closeRiftDialogBox()
-    clickRiftBack()
-    clickScenario()
-    clickScenarioStage()
-  elseif riftBackRegion:existsClick(Pattern("back2Button.png"), 3) then
-    clickScenario()
-    clickScenarioStage()
-  elseif dialogToaRegion:existsClick(Pattern("dialogTOA.png"):similar(imgAccuracy), 0.1) then
-    closeToaDialogBox()
-    clickScenario()
-    clickScenarioStage()
-  elseif backButtonRegion:exists(Pattern("backButton.png"):similar(0.8), 0.1) then
-    clickScenario()
-    clickScenarioStage()
-  end
-end
+
 function clickTOAStage()
   if dialogToaRegion:exists(Pattern("dialogTOA.png"):similar(0.7), 1) then
     existsClick(Pattern("toaReady.png"):similar(imgAccuracy * 0.4), 2)
@@ -2558,7 +2102,6 @@ function runScenarioDungeon()
   findDungeon()
   findHallB10()
   findRift()
-  findScenario()
   findTOA()
 end
 function runLiveArenaStart()
