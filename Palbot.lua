@@ -58,7 +58,7 @@ function defaultValues()
   timerNoActivity = 0
   timerNoRaidActivity = 0
   maxNoActivityTimeout = 600
-  maxConnectionTimeout = 600
+  connectionTimeout = 600
   maxNoRaidActivity = 120
   waitTimer = 30
   screenH = 0
@@ -604,24 +604,6 @@ function dialogBox()
     "17",
     "18"
   }
-  spinnerConnectionTimeout = {
-    "10",
-    "20",
-    "30",
-    "40",
-    "50",
-    "60",
-    "OFF"
-  }
-  spinnerNoActivityTimeout = {
-    "10",
-    "20",
-    "30",
-    "40",
-    "50",
-    "60",
-    "OFF"
-  }
   addTextView("Resolution: ")
   addSpinner("screenRes", spinnerResolution, spinnerResolution[1])
   addTextView("  ")
@@ -643,11 +625,6 @@ function dialogBox()
   addTextView("Text Size    ")
   addCheckBox("autoUpdate", "Auto Update    ", true)
   newRow()
-  addSpinner("noActivityTimeout", spinnerNoActivityTimeout, spinnerNoActivityTimeout[3])
-  addTextView("minutes.  No Script Activity Warning")
-  newRow()
-  addSpinner("connectionTimeout", spinnerConnectionTimeout, spinnerConnectionTimeout[3])
-  addTextView("minutes.  Network Connection Warning")
   dialogShowFullScreen("QuickClick Summoners War")
 end
 function runeDialogBox()
@@ -1061,17 +1038,6 @@ function setAdvancedOptions()
   runeAccuracy = runeDetectPct * 0.01
   textSizeNum = textSize * 1
   setHighlightTextStyle(16777215, 4294967295, textSizeNum)
-  if noActivityTimeout == "OFF" then
-    maxNoActivityTimeout = 99999999
-  else
-    maxNoActivityTimeout = noActivityTimeout * 60
-  end
-  if connectionTimeout == "OFF" then
-    maxConnectionTimeout = 99999999
-  else
-    maxConnectionTimeout = connectionTimeout * 1
-  end
-  connectionTimeout = connectionTimeout * 4
 end
 function setDimension16by9()
   local screen = getAppUsableScreenSize()
@@ -3391,9 +3357,8 @@ function runQuickClickStart()
       if not stopDefeat then
         defeated()
         if isMaxLevel then
-          playMusic("victory.mp3", false)
           printBattleMessage()
-          print("Max Level Reach!")
+          toast("Max Level Reach!")
           break
         end
         start()
@@ -3401,7 +3366,6 @@ function runQuickClickStart()
         printBattleMessage()
       else
         printBattleMessage()
-        playMusic("defeat.mp3", true)
         break
       end
     end
@@ -3414,9 +3378,8 @@ function runQuickClickStart()
         break
       end
       if isMaxLevel then
-        playMusic("victory.mp3", false)
         printBattleMessage()
-        print("Max Level Reach!")
+        toast("Max Level Reach!")
         break
       end
       replayOrNext()
@@ -3590,9 +3553,8 @@ while true do
       if not stopDefeat then
         defeated()
         if isMaxLevel then
-          playMusic("victory.mp3", false)
           printBattleMessage()
-          print("Max Level Reach!")
+          toast("Max Level Reach!")
           break
         end
         start()
@@ -3657,7 +3619,7 @@ while true do
         refreshList()
         arenaBattle()
       else
-        playMusic("defeat.mp3", true)
+        toast("defeated")
         break
       end
     end
