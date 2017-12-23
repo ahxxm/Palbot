@@ -10,13 +10,6 @@ setDragDropStepCount(10)
 setDragDropStepInterval(100)
 mainStatImages = {  "hpMain.png", "defMain.png", "atkMain.png", "spdMain.png", "criRateMain.png",
   "criDmgMain.png", "resMain.png", "accMain.png" }
-levelBattleImages = {"level40Battle.png", "level35Battle.png", "level30Battle.png", "level25Battle.png",
-  "level20Battle.png", "level15Battle.png" }
-battleSlotStarLevelImages = { "star6BattlePink.png", "star6BattleWhite.png", "star5BattlePink.png",
-  "star5BattleWhite.png", "star4BattlePink.png", "star4BattleWhite.png",
-  "star3BattlePink.png", "star3BattleWhite.png", "star2BattlePink.png",
-  "star2BattleWhite.png", "star1BattleWhite.png", }
-FodderSlotImages = {"0FodderSlot.png", "1FodderSlot.png", "2FodderSlot.png", "3FodderSlot.png", "4FodderSlot.png"}
 runeRarityImages = {"runeLegendary.png", "runeHero.png", "runeRare.png", "runeMagic.png", "runeNormal.png"}
 function automaticUpdates ()
   if autoUpdate == true then
@@ -31,10 +24,7 @@ function automaticUpdates ()
   end
 end
 function defaultValues()
-  monX = 0
-  monY = 0
-
-  -- run stats
+ -- run stats
   winCount = 0
   loseCount = 0
   arenaWinCount = 0
@@ -1357,6 +1347,7 @@ function clickNecroB10()
   end
 end
 function clickDungeon()
+  nocacheSnapshot()
   if runGiant then
     clickGiantB10()
   elseif runDragon then
@@ -1364,6 +1355,7 @@ function clickDungeon()
   elseif runNecro then
     clickNecroB10()
   end
+  cacheSnapshot()
 end
 function existsDungeon()
   if runGiant then
