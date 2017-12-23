@@ -1475,97 +1475,13 @@ function runeKeepCustom ()
       sellRune()
    end
 end
-function runeKeep1 ()
-  if runeRank == 6 and rareNum >= runeRarity6 then
-    runeKeep3 ()
-  elseif runeRank == 5 and rareNum >= runeRarity5 then
-    runeKeep3 ()
-  elseif runeRank == 4 and rareNum >= runeRarity4 then
-    runeKeep3 ()
-  elseif runeRank == 3 and rareNum >= runeRarity3 then
-    runeKeep3 ()
-  elseif runeRank == 2 and rareNum >= runeRarity2 then
-    runeKeep3 ()
-  elseif runeRank == 1 and rareNum >= runeRarity1 then
-    runeKeep3 ()
-  else
-    sellingRune = true
-    keepSell = "Selling Rune"
-    runeKeep5 ()
-  end
-end
-function runeKeep3 ()
-  if runeSlot == 2 and mainStat == ("HP") then
-    sellingRune = true
-    keepSell = "Selling Rune"
-    runeKeep5 ()
-  elseif runeSlot == 2 and mainStat == ("ATK") then
-    sellingRune = true
-    keepSell = "Selling Rune"
-    runeKeep5 ()
-  elseif runeSlot == 2 and mainStat == ("DEF") then
-    sellingRune = true
-    keepSell = "Selling Rune"
-    runeKeep5 ()
-  elseif runeSlot == 4 and mainStat == ("HP") then
-    sellingRune = true
-    keepSell = "Selling Rune"
-    runeKeep5 ()
-  elseif runeSlot == 4 and mainStat == ("ATK") then
-    sellingRune = true
-    keepSell = "Selling Rune"
-    runeKeep5 ()
-  elseif runeSlot == 4 and mainStat == ("DEF") then
-    sellingRune = true
-    keepSell = "Selling Rune"
-    runeKeep5 ()
-  elseif runeSlot == 6 and mainStat == ("HP") then
-    sellingRune = true
-    keepSell = "Selling Rune"
-    runeKeep5 ()
-  elseif runeSlot == 6 and mainStat == ("ATK") then
-    sellingRune = true
-    keepSell = "Selling Rune"
-    runeKeep5 ()
-  elseif runeSlot == 6 and mainStat == ("DEF") then
-    sellingRune = true
-    keepSell = "Selling Rune"
-    runeKeep5 ()
-  else
-    runeKeep4 ()
-  end
-end
+
 function tableLength(T)
     local count = 0
     for _ in pairs(T) do count = count + 1 end
     return count
 end
-function runeKeep4 ()
-  if keepSpdMain == true and mainStat == ("SPD") then
-    sellingRune = false
-    keepSell = "Keeping Rune"
-    runeKeep5 ()
-  elseif subMatch < nonFlatSub then
-    sellingRune = true
-    keepSell = "Selling Rune"
-    runeKeep5 ()
-  else
-    sellingRune = false
-    keepSell = "Keeping Rune"
-    runeKeep5 ()
-  end
-end
-function runeKeep5 ()
-  setHighlightTextStyle(16777215, 4294967295, textSizeNum)
-  runeStatString = " " .. runeRank .. " star \n" .. runeRarity .. "(" .. slotString .. ") rune \n Main Stat: " .. mainStat .. "\n Matching subs: " .. subMatch .. "% \n" .. keepSell .. " "
-  runeStatRegion:highlight(runeStatString)
-  if sellingRune == true then
-    sellRune()
-  else
-    getRune()
-  end
-  runeStatRegion:highlight(runeStatString)
-end
+
 function sellGetRune ()
   if grindstoneRegion:exists(Pattern("grindTilde.png"):similar(imgAccuracy), 0.1) then
     getRune()
@@ -1581,11 +1497,7 @@ function sellGetRune ()
     findRuneSlot()
     findMainStat()
     subEval()
-    if customKeep == true then
-      runeKeepCustom()
-    else
-      runeKeep1()
-    end
+    runeKeepCustom()
   end
 end
 function setLocation(a, b)
