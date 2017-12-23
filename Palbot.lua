@@ -98,7 +98,6 @@ function defaultTrueFalse ()
    runHallFire = false
    runHallWater = false
    runHallWind = false
-   runSD = false
    runRiftFire = false
    runRiftIce = false
    runRiftWind = false
@@ -423,15 +422,14 @@ function dialogBox()
     "Hall of Fire",
     "Hall of Water",
     "Hall of Wind",
-    "Secret Dungeon 1st",
-    "------------------------------------------", -- 13
+    "------------------------------------------", -- 12
     "Rift (Fire Beast)",
     "Rift (Ice Beast)",
     "Rift (Wind Beast)",
     "Rift (Light Beast)",
     "Rift (Dark Beast)",
     "Rift Raid",
-    "------------------------------------------", -- 20
+    "------------------------------------------", -- 19
     "Toa",
     "Live Arena",
     "Speed QuickClick"
@@ -495,26 +493,24 @@ function setDialogOptions()
   elseif farmLoc == spinnerFarmLoc[11] then
     runHallWind = true
   elseif farmLoc == spinnerFarmLoc[12] then
-    runSD = true
   elseif farmLoc == spinnerFarmLoc[13] then
-  elseif farmLoc == spinnerFarmLoc[14] then
     runRiftFire = true
-  elseif farmLoc == spinnerFarmLoc[15] then
+  elseif farmLoc == spinnerFarmLoc[14] then
     runRiftIce = true
-  elseif farmLoc == spinnerFarmLoc[16] then
+  elseif farmLoc == spinnerFarmLoc[15] then
     runRiftWind = true
-  elseif farmLoc == spinnerFarmLoc[17] then
+  elseif farmLoc == spinnerFarmLoc[16] then
     runRiftLight = true
-  elseif farmLoc == spinnerFarmLoc[18] then
+  elseif farmLoc == spinnerFarmLoc[17] then
     runRiftDark = true
-  elseif farmLoc == spinnerFarmLoc[19] then
+  elseif farmLoc == spinnerFarmLoc[18] then
     runRiftRaid = true
+  elseif farmLoc == spinnerFarmLoc[19] then
   elseif farmLoc == spinnerFarmLoc[20] then
-  elseif farmLoc == spinnerFarmLoc[21] then
     runTOA = true
-  elseif farmLoc == spinnerFarmLoc[22] then
+  elseif farmLoc == spinnerFarmLoc[21] then
     runLiveArena = true
-  elseif farmLoc == spinnerFarmLoc[23] then
+  elseif farmLoc == spinnerFarmLoc[22] then
     runQuickClick = true
   end
   
@@ -679,79 +675,6 @@ function clearBattleSlotMax()
   if slot4Max == true then
     click(battleSlot4Region)
     slot4Max = false
-  end
-end
-function StorageFodderEvaluater()
-  evaluateStorage = true
-  while evaluateStorage do
-    if fodderFill < 1 then
-      fodderStorageOkRegion:click(Pattern("ok.png"):similar(.80))
-      evaluateStorage = false
-    end
-    if monX > 7 then monX = 0 monY = monY+1
-      dragDrop(Location(574, 273), Location(574, 582))
-      wait (.1)
-      dragDrop(Location(574, 273), Location(574, 583))
-      wait(.1)
-    end
-    if monY > 3 then monY = 0
-      dragDrop(Location(574, 273), Location(574, 582))
-      wait (.1)
-      dragDrop(Location(574, 273), Location(574, 583))
-      wait(.1)
-    end
-    monLevelSpot = Region(1436 - monX*156, 830 - monY*156, 150, 55)
-    checkMonsRegion = Region(1491 - monX*156, 725 - monY*156, 90, 60)
-    emptyFodderRegion = Region(1450 - monX*156, 750 - monY*156, 120, 110)
-    if  monLevelSpot:exists(Pattern("maxFodder.png"):similar(.75), 0.1) then
-      if monLevelSpot:exists(Pattern("maxFodder40.png"):similar(.90), 0.1) then
-        scriptExit("No more monsters to max!")
-      end
-    elseif emptyFodderRegion:exists(Pattern("emptyFodder.png"):similar(.7), 0.1) then
-    elseif checkMonsRegion:exists(Pattern("checkMons.png"):similar(.70), 0.1) then
-    else
-      if fodderFill > 0 then
-        click(Location (1511 - monX*156, 830 - monY*156))
-        fodderFill = fodderFill - 1
-        if fodderFill < 1 then
-          fodderStorageOkRegion:click(Pattern("ok.png"):similar(.80))
-          monX = 0
-          monY = 0
-          evaluateStorage = false
-        end
-      end
-    end
-    monX = monX+1
-  end
-end
-function FindEmptyFodderSlots()
-  bestMatchIndex = existsMultiMax(FodderSlotImages, FindEmptyFodderSlotsRegion)
-  if (bestMatchIndex == 1) then
-    fodderFill = 0
-  elseif (bestMatchIndex == 2) then
-    fodderFill = 1
-  elseif (bestMatchIndex == 3) then
-    fodderFill = 2
-  elseif (bestMatchIndex == 4) then
-    fodderFill = 3
-  elseif (bestMatchIndex == 5) then
-    fodderFill = 4
-  else
-    fodderFill = 1
-  end
-  bestMatchIndex = existsMultiMax(FodderSlotImages, FindFillFodderSlotsRegion)
-  if (bestMatchIndex == 1) then
-    fodderFill = fodderFill - 0
-  elseif (bestMatchIndex == 2) then
-    fodderFill = fodderFill - 1
-  elseif (bestMatchIndex == 3) then
-    fodderFill = fodderFill - 2
-  elseif (bestMatchIndex == 4) then
-    fodderFill = fodderFill - 3
-  elseif (bestMatchIndex == 5) then
-    fodderFill = fodderFill - 4
-  else
-    fodderFill = 1
   end
 end
 function isBattleSlotMax()
@@ -1520,8 +1443,6 @@ function clickDungeon()
     clickDragonB10()
   elseif runNecro then
     clickNecroB10()
-  elseif runSD then
-    clickSD()
   end
 end
 function existsDungeon()
@@ -1537,10 +1458,6 @@ function existsDungeon()
     if dungeonListRegion:exists(Pattern("mapNecropolis.png"), 0.1) then
       return true
     end
-  elseif runSD then
-    if dungeonListRegion:exists(Pattern("mapSD.png"), 0.1) then
-      return true
-    end
   else
     return false
   end
@@ -1552,8 +1469,6 @@ function findDungeon()
     toast("Finding Dragon's Lair")
   elseif runNecro then
     toast("Finding Necropolis")
-  elseif runSD then
-    toast("Finding Secret Dungeon")
   else
     return
   end
