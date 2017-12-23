@@ -44,23 +44,24 @@ function defaultValues()
   r5Count = 0
   r5Sold = 0
   runeSold = 0
-  runLmt = 0
   bNum = 10
-  customRunLmt = 0
-  runLmtGroup = 0
   delayAmt = 0
   riftBattle = 0
   scanDelay = 0
   imgAccuracy = 0.7
   runeAccuracy = 0.9
-  textSize = ""
   textSizeNum = 12
+
+  waitTimer = 30
+
+  -- no activity
   timerNoActivity = 0
   timerNoRaidActivity = 0
   maxNoActivityTimeout = 600
   connectionTimeout = 600
   maxNoRaidActivity = 120
-  waitTimer = 30
+
+  -- screen
   screenH = 0
   screenW = 0
   bottombar = 0
@@ -69,22 +70,15 @@ function defaultValues()
   compareH = 0
   nextFodder = 1
   fodderX = 1245
-  nonFlatSub = 0
   runeSubCnt = 0
   runeSubPercCnt = 0
   runeDetect = 0.8
   maxDetect = 0.9
-  rareNum = 0
-  runeRarity6 = 0
-  runeRarity5 = 0
-  runeRarity4 = 0
-  runeRarity3 = 0
-  runeRarity2 = 0
-  runeRarity1 = 0
 end
 
 function defaultTrueFalse ()
    isArenaRival = false
+   nextArea = false
    stopMaxLevel = false
    isMaxLevel = false
    sellAllRune = false
@@ -148,8 +142,7 @@ function defaultTrueFalse ()
    keepAll = false
    customKeep = true
    runTestHighlight = false
-   keepSpdMain = false
-   screenshotSell = false
+   screenshotSell = true
    screenshotKeep = false
    sellingRune = false
    runRival = false
@@ -333,24 +326,13 @@ function testHighlight()
     wait(5)
   end
 end
-function isPro()
-  if string.find(getVersion(), "pro") then
-    return true
-  else
-    return false
-  end
-end
 function showBattleToast(duration)
   local toastMessage = ""
   local totalBattle = riftBattle + loseCount + winCount
   local totalArenaBattle = arenaWinCount + arenaLoseCount
   local totalRuneCount = runeSave + r6Count + r6Sold + r5Count + r5Sold + runeSold
   local totalRuneSold = r6Sold + r5Sold + runeSold
-  if runNum then
-    toastMessage = "Remaining runs: " .. runLmt .. ""
-  else
-    toastMessage = "Infinite runs"
-  end
+  toastMessage = "Infinite runs"
   if totalBattle > 0 then
     toastMessage = toastMessage .. [[
 
@@ -407,9 +389,7 @@ function showBattleResult(command)
   local totalArenaBattle = arenaWinCount + arenaLoseCount
   local totalRuneCount = runeSave + r6Count + r6Sold + r5Count + r5Sold + runeSold
   local totalRuneSold = r6Sold + r5Sold + runeSold
-  if runNum then
-    message = "Remaining runs: " .. runLmt .. ""
-  elseif stopMaxLevel then
+  if stopMaxLevel then
     message = "Stop at Max Level"
   else
     message = "Infinite runs"
@@ -485,59 +465,19 @@ function dialogBox()
     "Live Arena",
     "Speed QuickClick"
   }
-  spinnerLevel = {
-    "B1",
-    "B2",
-    "B3",
-    "B4",
-    "B5",
-    "B6",
-    "B7",
-    "B8",
-    "B9",
-    "B10"
-  }
   addTextView("Farming Mode: ")
   addSpinner("farmLoc", spinnerFarmLoc, spinnerFarmLoc[1])
+  addCheckBox("runArena", "Arena?", false)
+  newRow()
+  
+  addCheckBox("refillEnergy", "Refill Energy", true)
   addTextView("  ")
-  addTextView("Dungeon level: ")
-  addSpinner("dungeonLevel", spinnerLevel, spinnerLevel[10])
-  newRow()
-  addTextView("Dungeon level only applies to Carios Dungeon.")
-  newRow()
-  addCheckBox("runRival", "Arena Rivals?", false)
-  addTextView("  ")
-  addCheckBox("runMatchUp", "Arena Match-Up?", false)
-  newRow()
-  spinnerBattleLimit = {
-    "Infinite Runs",
-    "Custom Runs",
-    "4 Runs: Max level 1* fodder",
-    "10 Runs: Max level 2* fodder",
-    "22 Runs: Max level 3* fodder",
-    "49 Runs: Max level 4* fodder",
-    "Stop at Max Level: Slot 2, 3 or 4",
-  }
-  addSpinner("runLmtOption", spinnerBattleLimit, spinnerBattleLimit[1])
-  addTextView("  ")
-  addEditNumber("customRunLmt", 10)
-  addTextView("(Must select Custom Runs)")
-  newRow()
-  spinnerRefillOption = {
-    "NO Refills",
-    "Refill Energy with Crystals  "
-  }
-  addSpinner("refillOption", spinnerRefillOption, spinnerRefillOption[1])
-  addTextView("  (refill options)")
-  addEditNumber("storageMonsters", 0)
-  addTextView("(# of monsters in storage)")
-  newRow()
   addCheckBox("dim", "Dim Screen", false)
   addTextView("  ")
-  addCheckBox("stopDefeat", "Stop when defeated", false)
+  addCheckBox("stopMax", "Stop at max level?", false)
   addTextView("  ")
-  addCheckBox("nextArea", "Next stage", false)
   newRow()
+  
   addTextView("-------------------- Rune Options --------------------")
   newRow()
   addTextView("Disable both will enable rune filter. Don't enable both.")
@@ -553,184 +493,14 @@ function dialogBox()
     "1920x1080 (16:9)",
     "Others"
   }
-  spinnerScanSpeed = {
-    "Fast",
-    "Medium  ",
-    "Slow"
-  }
-  spinnerImgDetectPct = {
-    "60",
-    "65",
-    "70",
-    "75",
-    "80",
-    "85",
-    "90",
-    "95",
-    "99"
-  }
-  spinnerRuneDetectPct = {
-    "60",
-    "65",
-    "70",
-    "75",
-    "80",
-    "85",
-    "90",
-    "95",
-    "99"
-  }
-  spinnerMaxDetectPct = {
-    "60",
-    "65",
-    "70",
-    "75",
-    "80",
-    "85",
-    "90",
-    "95",
-    "99"
-  }
-  spinnerTextSize = {
-    "8",
-    "9",
-    "10",
-    "11",
-    "12",
-    "13",
-    "14",
-    "15",
-    "16",
-    "17",
-    "18"
-  }
   addTextView("Resolution: ")
   addSpinner("screenRes", spinnerResolution, spinnerResolution[1])
   addTextView("  ")
   addCheckBox("immersiveMode", "Immersive Mode (fullscreen)", false)
   newRow()
-  addTextView("Scan Speed: ")
-  addSpinner("scanSpeed", spinnerScanSpeed, spinnerScanSpeed[2])
-  newRow()
-  addSpinner("imgDetectPct", spinnerImgDetectPct, spinnerImgDetectPct[3])
-  addTextView("% image accuracy")
-  addTextView("    ")
-  addSpinner("runeDetectPct", spinnerRuneDetectPct, spinnerRuneDetectPct[5])
-  addTextView("% Rune Accuracy")
-  addTextView("    ")
-  addSpinner("maxDetectPct", spinnerMaxDetectPct, spinnerMaxDetectPct[7])
-  addTextView("% Maxlevel accuracy")
-  newRow()
-  addSpinner("textSize", spinnerTextSize, spinnerTextSize[5])
-  addTextView("Text Size    ")
   addCheckBox("autoUpdate", "Auto Update    ", true)
   newRow()
   dialogShowFullScreen("QuickClick Summoners War")
-end
-function runeDialogBox()
-  dialogInit()
-  addTextView("Set keep rarity based on star grade.")
-  newRow()
-  spinnerRuneRarity6 = {
-    "None",
-    "Normal",
-    "Magic",
-    "Rare",
-    "Hero",
-    "Legendary"
-  }
-  spinnerRuneRarity5 = {
-    "None",
-    "Normal",
-    "Magic",
-    "Rare",
-    "Hero",
-    "Legendary"
-  }
-  spinnerRuneRarity4 = {
-    "None",
-    "Normal",
-    "Magic",
-    "Rare",
-    "Hero",
-    "Legendary"
-  }
-  spinnerRuneRarity3 = {
-    "None",
-    "Normal",
-    "Magic",
-    "Rare",
-    "Hero",
-    "Legendary"
-  }
-  spinnerRuneRarity2 = {
-    "None",
-    "Normal",
-    "Magic",
-    "Rare",
-    "Hero",
-    "Legendary"
-  }
-  spinnerRuneRarity1 = {
-    "None",
-    "Normal",
-    "Magic",
-    "Rare",
-    "Hero",
-    "Legendary"
-  }
-  addTextView("6*: ")
-  addSpinner("runeRaritySelect6", spinnerRuneRarity6, spinnerRuneRarity6[1])
-  addTextView("5*: ")
-  addSpinner("runeRaritySelect5", spinnerRuneRarity5, spinnerRuneRarity5[1])
-  addTextView("4*: ")
-  addSpinner("runeRaritySelect4", spinnerRuneRarity4, spinnerRuneRarity4[1])
-  newRow()
-  addTextView("3*: ")
-  addSpinner("runeRaritySelect3", spinnerRuneRarity3, spinnerRuneRarity3[1])
-  addTextView("2*: ")
-  addSpinner("runeRaritySelect2", spinnerRuneRarity2, spinnerRuneRarity2[1])
-  addTextView("1*: ")
-  addSpinner("runeRaritySelect1", spinnerRuneRarity1, spinnerRuneRarity1[1])
-  newRow()
-  addCheckBox("keepSpdMain", "Always Keep SPD(2)", false)
-  newRow()
-  spinnerSubPerc = {
-    "0%",
-    "25%",
-    "33%",
-    "50%",
-    "66%",
-    "75%",
-    "100%"
-  }
-  addTextView("Non-flat subs %: ")
-  addSpinner("nonFlatSubSelect", spinnerSubPerc, spinnerSubPerc[1])
-  newRow()
-  addTextView("Screenshot Runes: ")
-  addCheckBox("screenshotKeep", "Kept Runes?", false)
-  addTextView("  ")
-  addCheckBox("screenshotSell", "Sold Runes?", false)
-  newRow()
-  addTextView("Screen shots will be saved in the Runes folder.")
-  newRow()
-  addTextView("Advised to empty Runes folder after reviewing.")
-  dialogShowFullScreen("Rune Filter")
-end
-function advancedOptionsDialog()
-  dialogInit()
-  addTextView("    Scan Speed: ")
-  addSpinner("scanSpeed", spinnerScanSpeed, spinnerScanSpeed[2])
-  newRow()
-  addSpinner("imgDetectPct", spinnerImgDetectPct, spinnerImgDetectPct[3])
-  addTextView("% Image Accuracy")
-  addTextView("    ")
-  addSpinner("runeDetectPct", spinnerRuneDetectPct, spinnerRuneDetectPct[5])
-  addTextView("% Rune Accuracy")
-  newRow()
-  addSpinner("textSize", spinnerTextSize, spinnerTextSize[5])
-  addTextView("Text Size")
-  dialogShow("Advanced Options")
 end
 function setDialogOptions()
   if farmLoc == spinnerFarmLoc[1] then
@@ -803,191 +573,16 @@ function setDialogOptions()
   elseif farmLoc == spinnerFarmLoc[37] then
     runQuickClick = true
   end
-  if dungeonLevel == spinnerLevel[1] then
-    bNum = 1
-  elseif dungeonLevel == spinnerLevel[2] then
-    bNum = 2
-  elseif dungeonLevel == spinnerLevel[3] then
-    bNum = 3
-  elseif dungeonLevel == spinnerLevel[4] then
-    bNum = 4
-  elseif dungeonLevel == spinnerLevel[5] then
-    bNum = 5
-  elseif dungeonLevel == spinnerLevel[6] then
-    bNum = 6
-  elseif dungeonLevel == spinnerLevel[7] then
-    bNum = 7
-  elseif dungeonLevel == spinnerLevel[8] then
-    bNum = 8
-  elseif dungeonLevel == spinnerLevel[9] then
-    bNum = 9
-  elseif dungeonLevel == spinnerLevel[10] then
-    bNum = 10
-  end
-  if runLmtOption == spinnerBattleLimit[1] then
-    runNum = false
-  elseif runLmtOption == spinnerBattleLimit[2] then
-    runNum = true
-    runLmt = customRunLmt
-  elseif runLmtOption == spinnerBattleLimit[3] then
-    runNum = true
-    runLmt = 4
-  elseif runLmtOption == spinnerBattleLimit[4] then
-    runNum = true
-    runLmt = 10
-  elseif runLmtOption == spinnerBattleLimit[5] then
-    runNum = true
-    runLmt = 22
-  elseif runLmtOption == spinnerBattleLimit[6] then
-    runNum = true
-    runLmt = 48
-  elseif runLmtOption == spinnerBattleLimit[7] then
+  
+  if stopMax then
     stopMaxLevel = true
   end
-  if sellAllRune == false and keepAll == false then
-    if runeRaritySelect6 == spinnerRuneRarity6[1] then
-      runeRarity6 = 0
-    elseif runeRaritySelect6 == spinnerRuneRarity6[2] then
-      runeRarity6 = 1
-    elseif runeRaritySelect6 == spinnerRuneRarity6[3] then
-      runeRarity6 = 2
-    elseif runeRaritySelect6 == spinnerRuneRarity6[4] then
-      runeRarity6 = 3
-    elseif runeRaritySelect6 == spinnerRuneRarity6[5] then
-      runeRarity6 = 4
-    elseif runeRaritySelect6 == spinnerRuneRarity6[6] then
-      runeRarity6 = 5
-    end
-    if runeRaritySelect5 == spinnerRuneRarity5[1] then
-      runeRarity5 = 0
-    elseif runeRaritySelect5 == spinnerRuneRarity5[2] then
-      runeRarity5 = 1
-    elseif runeRaritySelect5 == spinnerRuneRarity5[3] then
-      runeRarity5 = 2
-    elseif runeRaritySelect5 == spinnerRuneRarity5[4] then
-      runeRarity5 = 3
-    elseif runeRaritySelect5 == spinnerRuneRarity5[5] then
-      runeRarity5 = 4
-    elseif runeRaritySelect5 == spinnerRuneRarity5[6] then
-      runeRarity5 = 5
-    end
-    if runeRaritySelect4 == spinnerRuneRarity4[1] then
-      runeRarity4 = 0
-    elseif runeRaritySelect4 == spinnerRuneRarity4[2] then
-      runeRarity4 = 1
-    elseif runeRaritySelect4 == spinnerRuneRarity4[3] then
-      runeRarity4 = 2
-    elseif runeRaritySelect4 == spinnerRuneRarity4[4] then
-      runeRarity4 = 3
-    elseif runeRaritySelect4 == spinnerRuneRarity4[5] then
-      runeRarity4 = 4
-    elseif runeRaritySelect4 == spinnerRuneRarity4[6] then
-      runeRarity4 = 5
-    end
-    if runeRaritySelect3 == spinnerRuneRarity3[1] then
-      runeRarity3 = 0
-    elseif runeRaritySelect3 == spinnerRuneRarity3[2] then
-      runeRarity3 = 1
-    elseif runeRaritySelect3 == spinnerRuneRarity3[3] then
-      runeRarity3 = 2
-    elseif runeRaritySelect3 == spinnerRuneRarity3[4] then
-      runeRarity3 = 3
-    elseif runeRaritySelect3 == spinnerRuneRarity3[5] then
-      runeRarity3 = 4
-    elseif runeRaritySelect3 == spinnerRuneRarity3[6] then
-      runeRarity3 = 5
-    end
-    if runeRaritySelect2 == spinnerRuneRarity2[1] then
-      runeRarity2 = 0
-    elseif runeRaritySelect2 == spinnerRuneRarity2[2] then
-      runeRarity2 = 1
-    elseif runeRaritySelect2 == spinnerRuneRarity2[3] then
-      runeRarity2 = 2
-    elseif runeRaritySelect2 == spinnerRuneRarity2[4] then
-      runeRarity2 = 3
-    elseif runeRaritySelect2 == spinnerRuneRarity2[5] then
-      runeRarity2 = 4
-    elseif runeRaritySelect2 == spinnerRuneRarity2[6] then
-      runeRarity2 = 5
-    end
-    if runeRaritySelect1 == spinnerRuneRarity1[1] then
-      runeRarity1 = 0
-    elseif runeRaritySelect1 == spinnerRuneRarity1[2] then
-      runeRarity1 = 1
-    elseif runeRaritySelect1 == spinnerRuneRarity1[3] then
-      runeRarity1 = 2
-    elseif runeRaritySelect1 == spinnerRuneRarity1[4] then
-      runeRarity1 = 3
-    elseif runeRaritySelect1 == spinnerRuneRarity1[5] then
-      runeRarity1 = 4
-    elseif runeRaritySelect1 == spinnerRuneRarity1[6] then
-      runeRarity1 = 5
-    end
-    if nonFlatSubSelect == spinnerSubPerc[1] then
-      nonFlatSub = 0
-    elseif nonFlatSubSelect == spinnerSubPerc[2] then
-      nonFlatSub = 25
-    elseif nonFlatSubSelect == spinnerSubPerc[3] then
-      nonFlatSub = 33
-    elseif nonFlatSubSelect == spinnerSubPerc[4] then
-      nonFlatSub = 50
-    elseif nonFlatSubSelect == spinnerSubPerc[5] then
-      nonFlatSub = 66
-    elseif nonFlatSubSelect == spinnerSubPerc[6] then
-      nonFlatSub = 75
-    elseif nonFlatSubSelect == spinnerSubPerc[7] then
-      nonFlatSub = 100
-    end
-    if runeDetectPct == spinnerRuneDetectPct[1] then
-      runeDetect = 0.6
-    elseif runeDetectPct == spinnerRuneDetectPct[2] then
-      runeDetect = 0.65
-    elseif runeDetectPct == spinnerRuneDetectPct[3] then
-      runeDetect = 0.7
-    elseif runeDetectPct == spinnerRuneDetectPct[4] then
-      runeDetect = 0.75
-    elseif runeDetectPct == spinnerRuneDetectPct[5] then
-      runeDetect = 0.8
-    elseif runeDetectPct == spinnerRuneDetectPct[6] then
-      runeDetect = 0.85
-    elseif runeDetectPct == spinnerRuneDetectPct[7] then
-      runeDetect = 0.9
-    elseif runeDetectPct == spinnerRuneDetectPct[8] then
-      runeDetect = 0.95
-    elseif runeDetectPct == spinnerRuneDetectPct[9] then
-      runeDetect = 0.99
-    end
-    if maxDetectPct == spinnerMaxDetectPct[1] then
-      maxDetect = 0.6
-    elseif maxDetectPct == spinnerMaxDetectPct[2] then
-      maxDetect = 0.65
-    elseif maxDetectPct == spinnerMaxDetectPct[3] then
-      maxDetect = 0.70
-    elseif maxDetectPct == spinnerMaxDetectPct[4] then
-      maxDetect = 0.75
-    elseif maxDetectPct == spinnerMaxDetectPct[5] then
-      maxDetect = 0.80
-    elseif maxDetectPct == spinnerMaxDetectPct[6] then
-      maxDetect = 0.85
-    elseif maxDetectPct == spinnerMaxDetectPct[7] then
-      maxDetect = 0.90
-    elseif maxDetectPct == spinnerMaxDetectPct[8] then
-      maxDetect = 0.95
-    elseif maxDetectPct == spinnerMaxDetectPct[9] then
-      maxDetect = 0.99
-    end
+  
+  if runArena then
+     runRival = true
+     runMatchUp = true
   end
-  if runRival == false and runMatchUp == false then
-    runArena = false
-  else
-    runArena = true
-  end
-  if refillOption == spinnerRefillOption[1] then
-    refillEnergy = false
-  elseif refillOption == spinnerRefillOption[2] then
-    refillEnergy = true
-  end
-  if isPro() and dim then
+  if dim then
     setBrightness(1)
   end
 end
@@ -1026,17 +621,7 @@ function setAdvancedOptions()
   if immersiveMode then
     setImmersiveMode(true)
   end
-  if scanSpeed == spinnerScanSpeed[1] then
-    scanDelay = 0
-  elseif scanSpeed == spinnerScanSpeed[2] then
-    scanDelay = 4
-  elseif scanSpeed == spinnerScanSpeed[3] then
-    scanDelay = 10
-  end
-  imgAccuracy = imgDetectPct * 0.01
   Settings:set("MinSimilarity", imgAccuracy)
-  runeAccuracy = runeDetectPct * 0.01
-  textSizeNum = textSize * 1
   setHighlightTextStyle(16777215, 4294967295, textSizeNum)
 end
 function setDimension16by9()
@@ -1070,13 +655,7 @@ end
 
 function start()
    if startRegion:exists(Pattern("start.png"):similar(imgAccuracy), 2) then
-    takeSnapshot()
-    if not startDialogRegion:exists(Pattern("startArenaBattle.png"), 0.1) and not startDialogRegion:exists(Pattern("startGiant.png"), 0.1) and not startDialogRegion:exists(Pattern("startDragon.png"), 0.1) and not startDialogRegion:exists(Pattern("startNecro.png"), 0.1) and not startDialogRegion:exists(Pattern("startSD.png"), 0.1) and not startDialogRegion:exists(Pattern("startHall.png"), 0.1) and not startDialogRegion:exists(Pattern("startRaid.png"), 0.1) and not startDialogRegion:exists(Pattern("startRift.png"), 0.1) and not startDialogRegion:exists(Pattern("startToa.png"), 0.1) then
-      checkMaxLevel()
-      autoSwitchFodder()
-    end
     startRegion:existsClick(Pattern("start.png"):similar(imgAccuracy), 3)
-    clearSnapshot()
     if noLeaderSkillRegion:exists(Pattern("noLeaderSkill.png"):similar(imgAccuracy), 2) then
       noLeaderSkillYesRegion:existsClick(Pattern("yes.png"):similar(imgAccuracy), 0.1)
     end
@@ -1148,19 +727,8 @@ function setAsScenario()
   isDungeon = false
   isScenario = true
 end
-function runLmtCheck()
-  if runLmt <= 0 and runNum then
-    printBattleMessage()
-    return true
-  else
-    return false
-  end
-end
 function clearBattleSlotMax()
   usePreviousSnap(false)
----  if slot1Max == true then
----   click(battleSlot1Region)
----  end
   if slot2Max == true then
     click(battleSlot2Region)
     slot2Max = false
@@ -1215,13 +783,6 @@ function StorageFodderEvaluater()
       end
     end
     monX = monX+1
-  end
-end
-function StorageFodderScrollBottom()
-  local a = (storageMonsters / 32)
-  while a > 0 do
-    swipe(Location(741, 741), Location(741, 122))
-    a = a - 1
   end
 end
 function FindEmptyFodderSlots()
@@ -1293,27 +854,21 @@ function findRuneRarity()
   local bestMatchIndex = existsMultiMax(runeRarityImages, runeRarityRegion)
   if (bestMatchIndex == 1) then
     runeRarity = "Legendary"
-    rareNum = 5
     runeSubCnt = 4
   elseif (bestMatchIndex == 2) then
     runeRarity = "Hero"
-    rareNum = 4
     runeSubCnt = 3
   elseif (bestMatchIndex == 3) then
     runeRarity = "Rare"
-    rareNum = 3
     runeSubCnt = 2
   elseif (bestMatchIndex == 4) then
     runeRarity = "Magic"
-    rareNum = 2
     runeSubCnt = 1
   elseif (bestMatchIndex == 5) then
     runeRarity = "Normal"
-    rareNum = 1
     runeSubCnt = 0
   else
     runeRarity = "Legendary"
-    rareNum = 5
     runeSubCnt = 1
   end
   runeRarityRegion:highlight()
@@ -1965,14 +1520,6 @@ function clickGiantB10()
     dragDrop(Location(1200, 835), Location(1200, 320))
     wait(1)
     dragDrop(Location(1200, 835), Location(1200, 320))
-    if bNum < 7 then
-      wait(1)
-      dragDrop(Location(1200, 320), Location(1200, 835))
-      if bNum < 4 then
-        wait(1)
-        dragDrop(Location(1200, 320), Location(1200, 835))
-      end
-    end
     if dungeonBattleRegion:exists(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0))) then
         dungeonBattleRegion:existsClick(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
     elseif dungeonListRegion:exists(Pattern("mapGiantsKeep.png"):similar(imgAccuracy), 1) then
@@ -1988,14 +1535,6 @@ function clickDragonB10()
     dragDrop(Location(1200, 835), Location(1200, 320))
     wait(1)
     dragDrop(Location(1200, 835), Location(1200, 320))
-    if bNum < 7 then
-      wait(1)
-      dragDrop(Location(1200, 320), Location(1200, 835))
-      if bNum < 4 then
-        wait(1)
-        dragDrop(Location(1200, 320), Location(1200, 835))
-      end
-    end
     if dungeonBattleRegion:exists(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0))) then
         dungeonBattleRegion:existsClick(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
     elseif dungeonListRegion:exists(Pattern("mapDragonsLair.png"):similar(imgAccuracy), 1) then
@@ -2011,14 +1550,6 @@ function clickNecroB10()
     dragDrop(Location(1200, 835), Location(1200, 320))
     wait(1)
     dragDrop(Location(1200, 835), Location(1200, 320))
-    if bNum < 7 then
-      wait(1)
-      dragDrop(Location(1200, 320), Location(1200, 835))
-      if bNum < 4 then
-        wait(1)
-        dragDrop(Location(1200, 320), Location(1200, 835))
-      end
-    end
     if dungeonBattleRegion:exists(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0))) then
         dungeonBattleRegion:existsClick(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
     elseif dungeonListRegion:exists(Pattern("mapNecropolis.png"):similar(imgAccuracy), 1) then
@@ -2170,14 +1701,6 @@ function clickHallofMagicB10()
     dragDrop(Location(1200, 835), Location(1200, 320))
     wait(1)
     dragDrop(Location(1200, 835), Location(1200, 320))
-    if bNum < 7 then
-      wait(1)
-      dragDrop(Location(1200, 320), Location(1200, 835))
-      if bNum < 4 then
-        wait(1)
-        dragDrop(Location(1200, 320), Location(1200, 835))
-      end
-    end
     dungeonBattleRegion:click(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
   end
 end
@@ -2187,14 +1710,6 @@ function clickHallofLightB10()
     dragDrop(Location(1200, 835), Location(1200, 320))
     wait(1)
     dragDrop(Location(1200, 835), Location(1200, 320))
-    if bNum < 7 then
-      wait(1)
-      dragDrop(Location(1200, 320), Location(1200, 835))
-      if bNum < 4 then
-        wait(1)
-        dragDrop(Location(1200, 320), Location(1200, 835))
-      end
-    end
     dungeonBattleRegion:click(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
   end
 end
@@ -2204,14 +1719,6 @@ function clickHallofDarkB10()
     dragDrop(Location(1200, 835), Location(1200, 320))
     wait(1)
     dragDrop(Location(1200, 835), Location(1200, 320))
-    if bNum < 7 then
-      wait(1)
-      dragDrop(Location(1200, 320), Location(1200, 835))
-      if bNum < 4 then
-        wait(1)
-        dragDrop(Location(1200, 320), Location(1200, 835))
-      end
-    end
     dungeonBattleRegion:click(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
   end
 end
@@ -2221,14 +1728,6 @@ function clickHallofFireB10()
     dragDrop(Location(1200, 835), Location(1200, 320))
     wait(1)
     dragDrop(Location(1200, 835), Location(1200, 320))
-    if bNum < 7 then
-      wait(1)
-      dragDrop(Location(1200, 320), Location(1200, 835))
-      if bNum < 4 then
-        wait(1)
-        dragDrop(Location(1200, 320), Location(1200, 835))
-      end
-    end
     dungeonBattleRegion:click(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
   end
 end
@@ -2238,14 +1737,6 @@ function clickHallofWaterB10()
     dragDrop(Location(1200, 835), Location(1200, 320))
     wait(1)
     dragDrop(Location(1200, 835), Location(1200, 320))
-    if bNum < 7 then
-      wait(1)
-      dragDrop(Location(1200, 320), Location(1200, 835))
-      if bNum < 4 then
-        wait(1)
-        dragDrop(Location(1200, 320), Location(1200, 835))
-      end
-    end
     dungeonBattleRegion:click(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
   end
 end
@@ -2255,14 +1746,6 @@ function clickHallofWindB10()
     dragDrop(Location(1200, 835), Location(1200, 320))
     wait(1)
     dragDrop(Location(1200, 835), Location(1200, 320))
-    if bNum < 7 then
-      wait(1)
-      dragDrop(Location(1200, 320), Location(1200, 835))
-      if bNum < 4 then
-        wait(1)
-        dragDrop(Location(1200, 320), Location(1200, 835))
-      end
-    end
     dungeonBattleRegion:click(Pattern("mapB"..bNum..".png"):targetOffset(setLocation(453, 0)))
   end
 end
@@ -3229,22 +2712,14 @@ function runLiveArenaStart()
     end
     if exists(Pattern("victory.png"):similar(.7), 0.1) then
       arenaWinCount = arenaWinCount + 1
-      runLmt = runLmt - 1
       resetTimerNoActivity()
-      if runLmtCheck() then
-        break
-      end
       showBattleResult("Live Arena Start")
       printBattleMessage()
       existsClick(Pattern("victory.png"):similar(.7), 0.1)
     end
     if exists(Pattern("defeat.png"):similar(.7), 0.1) then
       arenaLoseCount = arenaLoseCount + 1
-      runLmt = runLmt - 1
       resetTimerNoActivity()
-      if runLmtCheck() then
-        break
-      end
       showBattleResult("Live Arena Defeated")
       printBattleMessage()
       existsClick(Pattern("defeat.png"):similar(.7), 0.1)
@@ -3264,31 +2739,21 @@ function runQuickClickStart()
     end
     if reviveNoRegion:exists(Pattern("noRevive.png"):similar(imgAccuracy), 0.1) then
       loseCount = loseCount + 1
-      runLmt = runLmt - 1
       resetTimerNoActivity()
-      if not stopDefeat then
-        defeated()
-        if isMaxLevel then
-          printBattleMessage()
-          toast("Max Level Reach!")
-          break
-        end
-        start()
-        showBattleResult("Battle Start")
-        printBattleMessage()
-      else
-        printBattleMessage()
-        break
+      defeated()
+      if isMaxLevel then
+         printBattleMessage()
+         toast("Max Level Reach!")
+         break
       end
+      start()
+      showBattleResult("Battle Start")
+      printBattleMessage()
     end
     if victoryDiamondRegion:exists(Pattern("victoryDiamond.png"):similar(imgAccuracy * 1.1), 0.1) then
       winCount = winCount + 1
-      runLmt = runLmt - 1
       resetTimerNoActivity()
       victory()
-      if runLmtCheck() then
-        break
-      end
       if isMaxLevel then
         printBattleMessage()
         toast("Max Level Reach!")
@@ -3348,7 +2813,6 @@ function runRiftRaidStart ()
       wait(4)
       raidVictoryTotalRegion:existsClick(Pattern("raidVictoryTotal.png"):similar(0.6), 0.1)
       winCount = winCount + 1
-      runLmt = runLmt - 1
       showBattleResult("Start Battle")
       resetTimerNoActivity()
       showBattleResult("Battle Start")
@@ -3359,13 +2823,9 @@ function runRiftRaidStart ()
     if raidLossTotalRegion:exists(Pattern("raidVictoryTotal.png"):similar(0.6), 0.1) then
       raidLossTotalRegion:existsClick(Pattern("raidVictoryTotal.png"):similar(0.6), 0.1)
       loseCount = loseCount + 1
-      runLmt = runLmt - 1
       showBattleResult("Battle Start")
       printBattleMessage()
       resetTimerNoActivity()
-      if stopDefeat == true then
-        scriptExit ("Defeated, stopping as requested!")
-      end
       wait(3)
     end
     raidLossTotalRegion:highlight()
@@ -3410,9 +2870,6 @@ defaultValues ()
 defaultTrueFalse ()
 defaultRegionLocation ()
 dialogBox()
-if sellAllRune == false and keepAll == false then
-  runeDialogBox()
-end
 setDialogOptions()
 setAdvancedOptions()
 automaticUpdates ()
@@ -3436,7 +2893,6 @@ while true do
     end
     if victoryDiamondRegion:exists(Pattern("victoryDiamond.png"):similar(.7), 0.1) and not victoryDefeatStageRegion:exists(Pattern("arena.png"):similar(.7), 0.3) then
       winCount = winCount + 1
-      runLmt = runLmt - 1
       showBattleResult("Start Battle")
       resetTimerNoActivity()
       if stopMaxLevel == true then
@@ -3445,9 +2901,6 @@ while true do
       victory()
       showBattleResult("Battle Start")
       printBattleMessage()
-      if runLmtCheck() then
-        break
-      end
       if isMaxLevel then
         printBattleMessage()
         print("Max Level Reach!")
@@ -3458,22 +2911,16 @@ while true do
     end
     if reviveNoRegion:exists(Pattern("noRevive.png"):similar(imgAccuracy), 0.1) then
       loseCount = loseCount + 1
-      runLmt = runLmt - 1
       showBattleResult("Battle Start")
       printBattleMessage()
       resetTimerNoActivity()
-      if not stopDefeat then
-        defeated()
-        if isMaxLevel then
-          printBattleMessage()
-          toast("Max Level Reach!")
-          break
-        end
-        start()
-      else
-        printBattleMessage()
-        break
+      defeated()
+      if isMaxLevel then
+         printBattleMessage()
+         toast("Max Level Reach!")
+         break
       end
+      start()
     end
     if sellRegion:exists(Pattern("sell.png"):similar(.6)) then
       sellGetRune()
@@ -3507,33 +2954,20 @@ while true do
     end
     if victoryDefeatStageRegion:exists(Pattern("arena.png"):similar(imgAccuracy), 0.1) and victoryDefeatRegion:exists(Pattern("victory.png"):similar(imgAccuracy * 1.1), 0.3) then
       arenaWinCount = arenaWinCount + 1
-      runLmt = runLmt - 1
       showBattleResult("Arena Start")
       printBattleMessage()
       resetTimerNoActivity()
       arenaVictory()
-      if runLmtCheck() then
-        break
-      end
       arenaBattle()
     end
     if victoryDefeatStageRegion:exists(Pattern("arena.png"):similar(imgAccuracy), 0.1) and victoryDefeatRegion:exists(Pattern("defeat.png"):similar(imgAccuracy * 1.1), 0.3) then
       arenaLoseCount = arenaLoseCount + 1
-      runLmt = runLmt - 1
       showBattleResult("Arena Start")
       printBattleMessage()
       resetTimerNoActivity()
-      if runLmtCheck() then
-        break
-      end
-      if not stopDefeat then
-        arenaDefeat()
-        refreshList()
-        arenaBattle()
-      else
-        toast("defeated")
-        break
-      end
+      arenaDefeat()
+      refreshList()
+      arenaBattle()
     end
     if arenaRivalDialogRegion:existsClick(Pattern("arenaRivalDialog.png"), 0.1) then
       playRegion:existsClick(Pattern("play.png"):similar(0.9), 1)
