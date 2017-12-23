@@ -55,17 +55,12 @@ function defaultValues()
   runeAccuracy = 0.9
   textSize = ""
   textSizeNum = 12
-  timerMagicShop = 0
   timerNoActivity = 0
   timerNoRaidActivity = 0
   maxNoActivityTimeout = 600
   maxConnectionTimeout = 600
   maxNoRaidActivity = 120
   waitTimer = 30
-  searchMagicShopCount = 0
-  mysticalCount = 0
-  legendaryCount = 0
-  lightDarkCount = 0
   screenH = 0
   screenW = 0
   bottombar = 0
@@ -98,7 +93,6 @@ function defaultTrueFalse ()
    save5Star = false
    save6StarPct = false
    save5StarPct = false
-   runMagicShop = false
    runArena = false
    arenaCheck = false
    runGiant = false
@@ -136,7 +130,6 @@ function defaultTrueFalse ()
    isDungeon = false
    isArena = false
    isScenario = false
-   firstCheckMagicShop = true
    immersiveMode = false
    is16by9 = false
    is16by10 = false
@@ -262,8 +255,6 @@ monthlyEventXRegion = Region(1525, 35, 70, 70)
 mailboxXRegion = Region(1575, 115, 70, 70)
 closeXRegion = Region(1350, 0, 570, 350)
 iconPurchaseRegion = Region(1360, 895, 180, 170)
-magicShopItemRegion = Region(1170, 190, 195, 745)
-magicShopTimeRegion = Region(1310, 200, 75, 50)
 battleIconRegion = Region(975, 880, 205, 190)
 moveIconRegion = Region(1730, 880, 190, 200)
 fodderCommandRegion = Region(640, 550, 600, 50)
@@ -399,11 +390,7 @@ Arena:]] .. totalArenaBattle .. "  W:" .. arenaWinCount .. "  L:" .. arenaLoseCo
 
 Rune 6*:]] .. r6Count .. "  5*:" .. r5Count .. "  Sold:" .. totalRuneSold
   end
-  if 0 < searchMagicShopCount then
-    message = message .. [[
 
-Magic Shop Search:]] .. searchMagicShopCount .. " MS:" .. mysticalCount .. " LDS:" .. lightDarkCount .. " LS:" .. legendaryCount
-  end
   if message ~= "" then
     message = message .. [[
 
@@ -522,8 +509,6 @@ function dialogBox()
   addCheckBox("runRival", "Arena Rivals?", false)
   addTextView("  ")
   addCheckBox("runMatchUp", "Arena Match-Up?", false)
-  newRow()
-  addCheckBox("runMagicShop", "Check Magic Shop for scrolls:", false)
   newRow()
   spinnerBattleLimit = {
     "Infinite Runs",
@@ -1471,7 +1456,6 @@ function refill()
       showCommand("Out of Energy.  Waiting " .. waitTimer .. " minutes.")
       wait(60)
       waitTimer = waitTimer - 1
-      checkMagicShop()
     end
     waitTimer = 30
     hideCommand()
@@ -1650,17 +1634,6 @@ function checkTimerNoActivity()
     dialogInit()
     addTextView("No Script Activity.", 14)
     dialogShow("Warning")
-    return true
-  else
-    return false
-  end
-end
-function checkMagicShop()
-  local onehour = 3600
-  if onehour < timerMagicShop:check() or firstCheckMagicShop then
-    firstCheckMagicShop = false
-    timerMagicShop:set()
-    findMagicShop()
     return true
   else
     return false
@@ -2250,9 +2223,6 @@ function closeCairoDungeonDialogBox()
 end
 function closeScenarioDialogBox()
   closeXScenarioRegion:existsClick(Pattern("closeX.png"), 2)
-end
-function closeMagicShopDialogBox()
-  closeXMagicShopRegion:existsClick(Pattern("closeX.png"), 2)
 end
 function closeRiftDialogBox()
   closeXRiftRegion:existsClick(Pattern("closeX.png"), 2)
@@ -3654,80 +3624,6 @@ function findTOA()
     clickTOAStage()
   end
 end
-function getIslandStuff()
-  closeXRegion:existsClick(Pattern("close.png"), 2)
-  local a = 4
-  if not exists(Pattern("islandMana.png"), 0.1) then
-    while a > 0 do
-      zoomOut()
-      wait(1.7)
-      a = a - 1
-    end
-  end
-  a = 3
-  while a > 0 and exists(Pattern("islandMana.png"), 0.1) do
-    clickIslandMana()
-    do break end
-    do break end
-    a = a - 1
-  end
-  a = 6
-  while a > 0 and exists(Pattern("manaCrystalMax.png"), 0.1) do
-    clickIslandMax()
-    do break end
-    do break end
-    a = a - 1
-  end
-  a = 3
-  while a > 0 and exists(Pattern("islandCrystal.png"), 0.1) do
-    clickIslandCrystal()
-    do break end
-    do break end
-    a = a - 1
-  end
-  a = 15
-  while a > 0 and exists(Pattern("islandLevelUp.png"), 0.1) do
-    clickIslandLevelUp()
-    wait(2)
-    do break end
-    do break end
-    a = a - 1
-  end
-  clickMagicShop()
-end
-function clickMagicShop()
-  local a = 1
-  local shopString = "magicShopChest"
-  shopString = shopString .. ".png"
-  while a < 7 do
-    if existsClick(Pattern(shopString), 1) then
-      iconPurchaseRegion:existsClick(Pattern("iconPurchase.png"), 3)
-      purchaseMagicShopScroll()
-      break
-    else
-      a = a + 1
-      shopString = "magicShopChest" .. a .. ".png"
-    end
-  end
-  battleIconRegion:existsClick(Pattern("iconBattle.png"), 2)
-  wait(1)
-end
-function clickIslandMana()
-  if not existsClick(Pattern("islandMana.png"), 1) then
-    existsClick(Pattern("islandManaMax.png"), 1)
-  end
-end
-function clickIslandCrystal()
-  if not existsClick(Pattern("islandCrystal.png"), 1) then
-    existsClick(Pattern("islandCrystalMax.png"), 1)
-  end
-end
-function clickIslandLevelUp()
-  existsClick(Pattern("islandLevelUp.png"), 1)
-end
-function clickIslandMax()
-  existsClick(Pattern("manaCrystalMax.png"), 1)
-end
 function findMap()
   closeXMagicShopRegion:existsClick(Pattern("closeX.png"), 2)
   if moveIconRegion:exists(Pattern("iconMove.png"), 2) then
@@ -3736,107 +3632,7 @@ function findMap()
   battleIconRegion:existsClick(Pattern("iconBattle.png"), 2)
   wait(1.5)
 end
-function purchaseMagicShopScroll()
-  searchMagicShopCount = searchMagicShopCount + 1
-  magicShopTimeRegion:exists(Pattern("magicShopTime59.png"), 7)
-  local a = 5
-  while a > 0 do
-    if magicShopItemRegion:exists(Pattern("mysticalScroll.png"), 1) then
-      magicShopItemRegion:existsClick(Pattern("mysticalScroll.png"), 1)
-      existsClick(Pattern("buyMagicShop.png"), 1)
-      existsClick(Pattern("yesMagicShop.png"), 1)
-      mysticalCount = mysticalCount + 1
-    end
-    if magicShopItemRegion:exists(Pattern("ldScroll.png"), 1) then
-      magicShopItemRegion:existsClick(Pattern("ldScroll.png"), 1)
-      existsClick(Pattern("buyMagicShop.png"), 1)
-      existsClick(Pattern("yesMagicShop.png"), 1)
-      lightDarkCount = lightDarkCount + 1
-    end
-    if magicShopItemRegion:exists(Pattern("legendaryScroll.png"), 1) then
-      magicShopItemRegion:existsClick(Pattern("legendaryScroll.png"), 1)
-      existsClick(Pattern("buyMagicShop.png"), 1)
-      existsClick(Pattern("yesMagicShop.png"), 1)
-      legendaryCount = legendaryCount + 1
-    end
-    wait(1)
-    moveScenarioDown()
-    wait(1)
-    a = a - 1
-  end
-  timerMagicShop:set()
-  findMap()
-end
-function findIslandFirst()
-  if not exists(Pattern("islandFirst.png"), 0.1) then
-    moveUp()
-    moveUp()
-    moveDownLittle()
-    if not exists(Pattern("islandFirst.png"), 0.1) then
-      moveRight()
-      if not exists(Pattern("islandFirst.png"), 0.1) then
-        moveLeft()
-        if exists(Pattern("islandFirst.png"), 0.1) then
-        end
-      end
-    end
-  end
-end
-function findMagicShop()
-  if runMagicShop then
-    toast("Finding Magic Shop")
-    hideCommand()
-  else
-    return
-  end
-  if arenaRankRegion:exists(Pattern("arenaRank.png"), 0.1) then
-    closeArenaDialogBox()
-    backButtonRegion:existsClick(Pattern("backButton.png"):similar(0.8), 2)
-    getIslandStuff()
-  elseif dropInfoRegion:exists(Pattern("dropInfo.png"):similar(imgAccuracy), 0.1) then
-    closeScenarioDialogBox()
-    backButtonRegion:existsClick(Pattern("backButton.png"):similar(0.8), 2)
-    getIslandStuff()
-  elseif dialogCairoDungeonRegion:exists(Pattern("cairoDungeon.png"):similar(imgAccuracy), 0.1) then
-    closeCairoDungeonDialogBox()
-    backButtonRegion:existsClick(Pattern("backButton.png"):similar(0.8), 2)
-    getIslandStuff()
-  elseif riftStrategyRegion:exists(Pattern("riftStrategy.png"), 0.1) then
-    closeRiftDialogBox()
-    clickRiftBack()
-    wait(1)
-    backButtonRegion:existsClick(Pattern("backButton.png"):similar(0.8), 2)
-    getIslandStuff()
-  elseif riftBackRegion:existsClick(Pattern("back2Button.png"), 0.1) then
-    backButtonRegion:existsClick(Pattern("backButton.png"):similar(0.8), 2)
-    clickMagicShop()
-  elseif exists(Pattern("dialogTOA.png"):similar(imgAccuracy), 0.1) then
-    closeToaDialogBox()
-    backButtonRegion:existsClick(Pattern("backButton.png"):similar(0.8), 2)
-    getIslandStuff()
-  elseif backButtonRegion:exists(Pattern("backButton.png"):similar(0.8), 0.1) then
-    backButtonRegion:existsClick(Pattern("backButton.png"):similar(0.8), 2)
-    getIslandStuff()
-  elseif exists(Pattern("dialogMagicShop.png"), 2) then
-    purchaseMagicShopScroll()
-  end
-end
-function findPlayerIsland()
-  touchStartRegion:existsClick(Pattern("touchStart.png"), 3)
-  dontShowRegion:existsClick(Pattern("dontShow.png"), 3)
-  wait(1)
-  dontShowRegion:existsClick(Pattern("dontShow.png"), 3)
-  wait(1)
-  dontShowRegion:existsClick(Pattern("dontShow.png"), 3)
-  wait(1)
-  dontShowRegion:existsClick(Pattern("dontShow.png"), 3)
-  touchStartRegion:existsClick(Pattern("touchStart.png"), 3)
-  monthlyEventXRegion:existsClick(Pattern("closeX.png"), 3)
-  mailboxXRegion:existsClick(Pattern("closeX.png"), 3)
-  findMap()
-end
 function runScenarioDungeon()
-  checkMagicShop()
   findDungeon()
   findHallB10()
   findRift()
@@ -4064,7 +3860,6 @@ setAdvancedOptions()
 automaticUpdates ()
 showBattleResult("Begin")
 timerNoActivity = Timer()
-timerMagicShop = Timer()
 while true do
   if runRiftRaid == true then
     findRift ()
@@ -4272,31 +4067,16 @@ while true do
           closeNowYesRegion:existsClick(Pattern("yes.png"):similar(imgAccuracy), 0.1)
       end
     end
-    --if samsungSearchRegion:exists(Pattern("samsungSearch.png"), 0.1) then
-      --keyevent(4)
-      --keyevent(4)
-    --end
-    --Settings:setCompareDimension(true, compareH)
-    --if exists(Pattern("swApp.png"), 0.1) then
---      existsClick(Pattern("swApp.png"), 0.1)
---    end
-    --Settings:setCompareDimension(true, compareW)
-    --if pauseRegion:exists(Pattern("pause.png"):similar(imgAccuracy * 0.8), 0.1) then
-      --toast("Unpause")
-      --pauseRegion:existsClick(Pattern("pause.png"):similar(imgAccuracy * 0.8), 0.3)
-    --end
+    if pauseRegion:exists(Pattern("pause.png"):similar(imgAccuracy * 0.8), 0.1) then
+      toast("Unpause")
+      pauseRegion:existsClick(Pattern("pause.png"):similar(imgAccuracy * 0.8), 0.3)
+    end
     if playRegion:exists(Pattern("play.png"):similar(imgAccuracy), 0.1) then
       playRegion:existsClick(Pattern("play.png"):similar(0.8), 1)
     end
     if checkTimerNoActivity() then
       break
     end
-    --if touchStartRegion:exists(Pattern("touchStart.png"), 0.1) then
-      --findPlayerIsland()
-    --end
-    --if dontShowRegion:exists(Pattern("dontShow.png"), 0.1) then
-      --findPlayerIsland()
-    --end
     if battleIconRegion:existsClick(Pattern("iconBattle.png"), 0.1) then
       findMap()
     end
