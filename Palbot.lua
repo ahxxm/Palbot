@@ -331,13 +331,11 @@ subMatch = 1
 capRuneNo = 1
 slotString = "1"
 function captureScreenshot()
-  toast("capturing screen shot")
   setImagePath(localPath .. "Runes/")
   rgn = Region(0, 0, getRealScreenSize():getX(), getRealScreenSize():getY())
   rgn:save(tostring("Rune" .. tostring(capRuneNo) .. ".png"))
   wait(1)
   capRuneNo = capRuneNo + 1
-  toast("finished screenshot")
   setImagePath(localPath .. "1920x1080")
 end
 function zoomTest()
@@ -1901,7 +1899,9 @@ function sellRune()
   setHighlightTextStyle(16777215, 4294967295, textSizeNum)
   runeStatString = " " .. runeRank .. " star \n" .. runeRarity .. "(" .. slotString .. ") rune \n Main Stat: " .. mainStat .. "\n Pct subs: " .. subMatch .. "% \n" .. keepSell .. " "
   runeStatRegion:highlight(runeStatString)
-  captureScreenshot()
+  if sellAllRune then
+     captureScreenshot()
+  end
   sellRegion:existsClick(Pattern("sell.png"):similar(.6))
   runeYesRegion:existsClick(Pattern("yes.png"):similar(.6))
   if runeRank == 6 then r6Sold = r6Sold + 1
@@ -4356,31 +4356,31 @@ while true do
           closeNowYesRegion:existsClick(Pattern("yes.png"):similar(imgAccuracy), 0.1)
       end
     end
-    if samsungSearchRegion:exists(Pattern("samsungSearch.png"), 0.1) then
-      keyevent(4)
-      keyevent(4)
-    end
-    Settings:setCompareDimension(true, compareH)
-    if exists(Pattern("swApp.png"), 0.1) then
-      existsClick(Pattern("swApp.png"), 0.1)
-    end
-    Settings:setCompareDimension(true, compareW)
-    if pauseRegion:exists(Pattern("pause.png"):similar(imgAccuracy * 0.8), 0.1) then
-      toast("Unpause")
-      pauseRegion:existsClick(Pattern("pause.png"):similar(imgAccuracy * 0.8), 0.3)
-    end
+    --if samsungSearchRegion:exists(Pattern("samsungSearch.png"), 0.1) then
+      --keyevent(4)
+      --keyevent(4)
+    --end
+    --Settings:setCompareDimension(true, compareH)
+    --if exists(Pattern("swApp.png"), 0.1) then
+--      existsClick(Pattern("swApp.png"), 0.1)
+--    end
+    --Settings:setCompareDimension(true, compareW)
+    --if pauseRegion:exists(Pattern("pause.png"):similar(imgAccuracy * 0.8), 0.1) then
+      --toast("Unpause")
+      --pauseRegion:existsClick(Pattern("pause.png"):similar(imgAccuracy * 0.8), 0.3)
+    --end
     if playRegion:exists(Pattern("play.png"):similar(imgAccuracy), 0.1) then
       playRegion:existsClick(Pattern("play.png"):similar(0.8), 1)
     end
     if checkTimerNoActivity() then
       break
     end
-    if touchStartRegion:exists(Pattern("touchStart.png"), 0.1) then
-      findPlayerIsland()
-    end
-    if dontShowRegion:exists(Pattern("dontShow.png"), 0.1) then
-      findPlayerIsland()
-    end
+    --if touchStartRegion:exists(Pattern("touchStart.png"), 0.1) then
+      --findPlayerIsland()
+    --end
+    --if dontShowRegion:exists(Pattern("dontShow.png"), 0.1) then
+      --findPlayerIsland()
+    --end
     if battleIconRegion:existsClick(Pattern("iconBattle.png"), 0.1) then
       findMap()
     end
