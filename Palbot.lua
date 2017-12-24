@@ -536,6 +536,7 @@ end
 function refill()
   if refillEnergy then
     toast("Refilling Energy")
+    nocacheSnapshot()
     refillYesRegion:existsClick(Pattern("yesRecharge.png"):similar(imgAccuracy * 0.9), 3)
     rechargeFlashRegion:existsClick(Pattern("rechargeFlash.png"):similar(imgAccuracy), 3)
     yesPurchaseRegion:existsClick(Pattern("yesPurchase.png"):similar(imgAccuracy), 3)
