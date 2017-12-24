@@ -1904,13 +1904,17 @@ while true do
       riftBattleRegion:existsClick(Pattern("battle.png"):similar(imgAccuracy), 1)
     end
     if riftRankRegion:exists(Pattern("riftRank.png"):similar(imgAccuracy), 0.1) then
+      nocacheSnapshot()
       riftBattle = riftBattle + 1
       showBattleResult("Rift Battle Start")
       printBattleMessage()
       resetTimerNoActivity()
       riftRankRegion:existsClick(Pattern("riftRank.png"):similar(imgAccuracy), 0.1)
+      wait(0.5)
       riftRankRegion:existsClick(Pattern("riftRank.png"):similar(imgAccuracy), 0.1)
+      wait(0.5)
       riftRankRegion:existsClick(Pattern("riftRank.png"):similar(imgAccuracy), 0.1)
+      wait(0.5)
       if not okRegion:existsClick(Pattern("ok.png"):similar(imgAccuracy), 1.5) then
         sellGetRune()
       end
@@ -1924,6 +1928,7 @@ while true do
     if notEnoughWingRegion:exists(Pattern("notEnoughWing.png"):similar(.6), 0.1) then
       refillNoRegion:existsClick(Pattern("noPurchase.png"):similar(0.6), 3)
       if farmLoc == spinnerFarmLoc[7] then
+        nocacheSnapshot()
         runRiftRaid = true
         existsClick(Pattern("closeX.png"):similar(.6), 3)
         existsClick(Pattern("back2Button.png"):similar(.6), 3)
