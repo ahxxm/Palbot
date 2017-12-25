@@ -592,18 +592,19 @@ function clearBattleSlotMax()
 end
 function isBattleSlotMax()
   nocacheSnapshot()
+  -- wait exp animation
   wait(2)
-  slot2MaxRegion:highlight(1)
+  slot2MaxRegion:highlight(0.3)
   if slot2MaxRegion:exists(Pattern("levelDone.png"):similar(maxDetect), 0.1) then
     slot2Max = true
     toast("Slot2Max")
   end
-  slot3MaxRegion:highlight(1)
+  slot3MaxRegion:highlight(0.3)
   if slot3MaxRegion:exists(Pattern("levelDone.png"):similar(maxDetect), 0.1) then
     slot3Max = true
     toast("Slot3Max")
   end
-  slot4MaxRegion:highlight(1)
+  slot4MaxRegion:highlight(0.3)
   if slot4MaxRegion:exists(Pattern("levelDone.png"):similar(maxDetect), 0.1) then
     slot4Max = true
     toast("Slot4Max")
