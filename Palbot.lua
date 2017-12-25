@@ -67,7 +67,6 @@ end
 
 function defaultTrueFalse ()
    isArenaRival = false
-   nextArea = false
    stopMaxLevel = false
    isMaxLevel = false
    sellAllRune = false
@@ -135,7 +134,6 @@ function defaultRegionLocation ()
   victoryDiamondRegion = Region(1430, 485, 120, 120)
   okRegion = Region(900, 730, 120, 300)
   replayRegion = Region(490, 550, 170, 75)
-  nextRegion = Region(1145, 555, 250, 65)
   toaNextStageRegion = Region(320, 510, 585, 145)
   reviveNoRegion = Region(1190, 675, 95, 60)
   noLeaderSkillRegion = Region(1160, 360, 110, 55)
@@ -261,8 +259,7 @@ function zoomTest()
 end
 function testHighlight()
   while runTestHighlight do
-    arenaMatchupRegion:highlight(10)
-    arenaRivalRegion:highlight(10)
+    toaNextStageRegion:highlight(10)
     wait(5)
   end
 end
@@ -521,12 +518,8 @@ function start()
   cacheSnapshot()
 end
 function replayOrNext()
-  if nextArea then
-    nextRegion:existsClick(Pattern("next.png"), 5)
-    toaNextStageRegion:existsClick(Pattern("next.png"), 0.1)
-  elseif not replayRegion:existsClick(Pattern("replay.png"), 5) then
-    toaNextStageRegion:existsClick(Pattern("next.png"), 0.1)
-  end
+  -- actually no next
+  toaNextStageRegion:existsClick(Pattern("next.png"), 0.1)
 end
 function refill()
   if refillEnergy then
@@ -1762,6 +1755,8 @@ while true do
   -- dungeon or current battle
   elseif not runLiveArena or not runRiftRaid then
     cacheSnapshot()
+
+    -- start battle/no revive/rune eval
     if startRegion:exists(Pattern("start.png"):similar(imgAccuracy), 0.1) then
       start()
     end
@@ -1802,10 +1797,6 @@ while true do
     end
     if runeSellTextRegion:existsClick(Pattern("runeSellText.png"), 0.1) then
       runeYesRegion:existsClick(Pattern("yes.png"):similar(imgAccuracy * 0.9), 0.1)
-    end
-    if nextArea and nextRegion:exists(Pattern("next.png"), 0.1) then
-      replayOrNext()
-      start()
     end
     if toaNextStageRegion:exists(Pattern("next.png"):similar(imgAccuracy), 0.1) then
       replayOrNext()
