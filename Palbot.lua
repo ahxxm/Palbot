@@ -519,8 +519,10 @@ function start()
   cacheSnapshot()
 end
 function replayOrNext()
-  -- actually no next
-  toaNextStageRegion:existsClick(Pattern("next.png"), 0.1)
+   -- next for toa, replay for others
+   if not replayRegion:existsClick(Pattern("replay.png"), 5) then
+      toaNextStageRegion:existsClick(Pattern("next.png"), 0.1)
+   end
 end
 function refill()
   if refillEnergy then
