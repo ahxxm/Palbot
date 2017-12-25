@@ -109,10 +109,6 @@ function defaultTrueFalse ()
 end
 
 function defaultRegionLocation ()
-  FindEmptyFodderSlotsRegion = Region(1540, 210, 30, 35)
-  FindFillFodderSlotsRegion = Region(1502, 210, 30, 35)
-  fodderStorageOkRegion = Region(910, 915, 90, 60)
-  storageIconRegion = Region(30, 660, 160, 160)
   mainStatRegion = Region(760, 350, 400, 60)
   runeSlotRegion = Region(574, 242, 770, 100)
   runeRarityRegion = Region(1160, 340, 170, 70)
@@ -133,8 +129,12 @@ function defaultRegionLocation ()
   victoryDefeatStageRegion = Region(670, 235, 605, 65)
   victoryDiamondRegion = Region(1430, 485, 120, 120)
   okRegion = Region(900, 730, 120, 300)
+
+  -- bigger replay and replay text
   replayRegion = Region(490, 550, 170, 75)
   toaNextStageRegion = Region(320, 510, 585, 145)
+
+
   reviveNoRegion = Region(1190, 675, 95, 60)
   noLeaderSkillRegion = Region(1160, 360, 110, 55)
   noLeaderSkillYesRegion = Region(740, 620, 105, 65)
@@ -259,8 +259,9 @@ function zoomTest()
 end
 function testHighlight()
   while runTestHighlight do
-    toaNextStageRegion:highlight(10)
-    wait(5)
+     toaNextStageRegion:highlight(10)
+     replayRegion:highlight(10)
+     wait(5)
   end
 end
 function showBattleToast(duration)
