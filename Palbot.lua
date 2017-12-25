@@ -101,8 +101,6 @@ function defaultTrueFalse ()
    keepAll = false
    customKeep = true
    runTestHighlight = false
-   screenshotSell = true
-   screenshotKeep = false
    sellingRune = false
    runRival = false
    runMatchUp = false
@@ -767,13 +765,15 @@ function subEval()
   end
   subMatch = math.floor(runeSubPercCnt / runeSubCnt * 100)
 end
+
 function sellRune()
+  -- take screenshot with eval result
   setHighlightTextStyle(16777215, 4294967295, textSizeNum)
   runeStatString = " " .. runeRank .. " star \n" .. runeRarity .. "(" .. slotString .. ") rune \n Main Stat: " .. mainStat .. "\n Pct subs: " .. subMatch .. "% \n" .. keepSell .. " "
   runeStatRegion:highlight(runeStatString)
-  if sellAllRune then
-     captureScreenshot()
-  end
+  captureScreenshot()
+
+  -- then sell and record
   sellRegion:existsClick(Pattern("sell.png"):similar(.6))
   runeYesRegion:existsClick(Pattern("yes.png"):similar(.6))
   if runeRank == 6 then r6Sold = r6Sold + 1
@@ -782,14 +782,8 @@ function sellRune()
   end
   runeStatRegion:highlightOff()
 end
+
 function getRune()
-  if screenshotKeep == true then
-    setHighlightTextStyle(16777215, 4294967295, textSizeNum)
-    runeStatString = " " .. runeRank .. " star \n" .. runeRarity .. "(" .. slotString .. ") rune \n Main Stat: " .. mainStat .. "\n Pct subs: " .. subMatch .. "% \n" .. keepSell .. " "
-    runeStatRegion:highlight(runeStatString)
-    captureScreenshot()
-    runeStatRegion:highlightOff()
-  end
   getRegion:existsClick(Pattern("get.png"):similar(.6))
   if runeRank == 6 then r6Count = r6Count + 1
   elseif runeRank == 5 then r5Count = r5Count + 1
