@@ -601,6 +601,7 @@ function clearBattleSlotMax()
   end
 end
 function isBattleSlotMax()
+  wait(2)
   slot2MaxRegion:highlight(1)
   if slot2MaxRegion:exists(Pattern("levelDone.png"):similar(maxDetect), 0.1) then
     slot2Max = true
