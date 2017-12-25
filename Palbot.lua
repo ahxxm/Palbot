@@ -41,7 +41,6 @@ function defaultValues()
   -- default values
   bNum = 10
   delayAmt = 0
-  scanDelay = 0
   imgAccuracy = 0.7
   runeAccuracy = 0.9
   textSizeNum = 12
@@ -84,7 +83,6 @@ function defaultTrueFalse ()
    runNecro = false
    runRiftRaid = false
    runLiveArena = false
-   runQuickClick = false
    isArena = false
    immersiveMode = false
    is16by9 = false
@@ -378,7 +376,6 @@ function dialogBox()
     "Rift Raid",
     "------------------------------------------", -- 8
     "Live Arena",
-    "Speed QuickClick"
   }
   addTextView("Farming Mode: ")
   addSpinner("farmLoc", spinnerFarmLoc, spinnerFarmLoc[1])
@@ -432,8 +429,6 @@ function setDialogOptions()
   elseif farmLoc == spinnerFarmLoc[8] then
   elseif farmLoc == spinnerFarmLoc[9] then
     runLiveArena = true
-  elseif farmLoc == spinnerFarmLoc[10] then
-    runQuickClick = true
   end
   
   if stopMax then
@@ -575,7 +570,6 @@ function victory()
   if not okRegion:existsClick(Pattern("ok.png"):similar(imgAccuracy), 1.5) then
     sellGetRune()
   end
-  cacheSnapshot()
 end
 function cacheSnapshot()
   usePreviousSnap(false)
@@ -601,6 +595,7 @@ function clearBattleSlotMax()
   end
 end
 function isBattleSlotMax()
+  nocacheSnapshot()
   wait(2)
   slot2MaxRegion:highlight(1)
   if slot2MaxRegion:exists(Pattern("levelDone.png"):similar(maxDetect), 0.1) then
@@ -1659,56 +1654,7 @@ function runLiveArenaStart()
     end
   end
 end
-function runQuickClickStart()
-  while runQuickClick do
-    if startRegion:exists(Pattern("start.png"):similar(imgAccuracy), 0.1) then
-      start()
-    end
-    if reviveNoRegion:exists(Pattern("noRevive.png"):similar(imgAccuracy), 0.1) then
-      loseCount = loseCount + 1
-      resetTimerNoActivity()
-      defeated()
-      if isMaxLevel then
-         printBattleMessage()
-         toast("Max Level Reach!")
-         break
-      end
-      start()
-      showBattleResult("Battle Start")
-      printBattleMessage()
-    end
-    if victoryDiamondRegion:exists(Pattern("victoryDiamond.png"):similar(imgAccuracy * 1.1), 0.1) then
-      winCount = winCount + 1
-      resetTimerNoActivity()
-      victory()
-      if isMaxLevel then
-        printBattleMessage()
-        toast("Max Level Reach!")
-        break
-      end
-      replayOrNext()
-      start()
-      showBattleResult("Rift Battle Start")
-      printBattleMessage()
-    end
-    if sellGetRegion:exists(Pattern("sell.png"):similar(.6)) then
-      sellGetRune()
-      start()
-    end
-    if replayRegion:exists(Pattern("replay.png"):similar(imgAccuracy), 0.1) then
-      replayOrNext()
-      start()
-    end
-    if notEnoughEnergyRegion:exists(Pattern("notEnoughEnergy.png"):similar(imgAccuracy), 0.1) then
-      refill()
-      replayOrNext()
-      start()
-    end
-    if playRegion:exists(Pattern("play.png"):similar(0.9), 0.1) then
-      playRegion:existsClick(Pattern("play.png"):similar(0.9), 1)
-    end
-  end
-end
+
 function checkNoRaidActivity()
   if timerNoRaidActivity:check() > maxNoRaidActivity then
     return true
@@ -1803,17 +1749,18 @@ automaticUpdates ()
 showBattleResult("Begin")
 timerNoActivity = Timer()
 while true do
+  -- subroutines
   if runRiftRaid == true then
-    findRift ()
+    findRift()
     clickRiftRaid()
     runRiftRaidStart()
-  elseif runQuickClick == true then
-    runQuickClickStart()
   elseif runTestHighlight == true then
     testHighlight()
   elseif runLiveArena == true then
     runLiveArenaStart()
-  elseif not runLiveArena or not runQuickClick or not runRiftRaid then
+
+  -- dungeon or current battle
+  elseif not runLiveArena or not runRiftRaid then
     cacheSnapshot()
     if startRegion:exists(Pattern("start.png"):similar(imgAccuracy), 0.1) then
       start()
@@ -1958,17 +1905,8 @@ while true do
     end
     if closePurchaseRegion:existsClick(Pattern("closePurchase.png"):similar(imgAccuracy), 0.1) then
     end
-    if dialogTextCenterRegion:exists(Pattern("PurchaseItem.png"):similar(imgAccuracy), 0.1) then
-      hideBattleResult()
-      closeXPurchaseRegion:existsClick(Pattern("closeX.png"):similar(imgAccuracy), 3)
-      existsClick(Pattern("close.png"), 0.1)
-      yesRegion:existsClick(Pattern("yes.png"):similar(imgAccuracy * 0.9), 3)
-      showBattleResult()
-    end
-    if (backButtonRegion:exists(Pattern("backButton.png"):similar(runeAccuracy * 0.8), 0.1) or dropInfoRegion:exists(Pattern("dropInfo.png"):similar(imgAccuracy), 0.1) or riftBackRegion:exists(Pattern("back2Button.png"), 0.1)) and not arenaRankRegion:exists(Pattern("arenaRank.png"):similar(imgAccuracy), 0.1) then
-      runScenarioDungeon()
-      start()
-    end
+
+    -- delay popup, should never break? FIXME
     if connectionDelayRegion:exists(Pattern("connectionDelay.png"):similar(imgAccuracy), 0.1) then
       delayAmt = 0
       while delayAmt < connectionTimeout do
@@ -1990,20 +1928,41 @@ while true do
           closeNowYesRegion:existsClick(Pattern("yes.png"):similar(imgAccuracy), 0.1)
       end
     end
+
+    -- unpause and start
     if pauseRegion:exists(Pattern("pause.png"):similar(imgAccuracy * 0.8), 0.1) then
-      toast("Unpause")
       pauseRegion:existsClick(Pattern("pause.png"):similar(imgAccuracy * 0.8), 0.3)
     end
     if playRegion:exists(Pattern("play.png"):similar(imgAccuracy), 0.1) then
       playRegion:existsClick(Pattern("play.png"):similar(0.8), 1)
     end
-    if checkTimerNoActivity() then
-      break
-    end
+
+    -- Battle button in main land
     if battleIconRegion:existsClick(Pattern("iconBattle.png"), 0.1) then
       findMap()
     end
-    nocacheSnapshot()
+
+    -- no activity timeout
+    -- FIXME: add screenshot to debug
+    if checkTimerNoActivity() then
+      break
+    end
+
+    -- Popup premium packs
+    -- FIXME: verify this works
+    if dialogTextCenterRegion:exists(Pattern("PurchaseItem.png"):similar(imgAccuracy), 0.1) then
+      hideBattleResult()
+      closeXPurchaseRegion:existsClick(Pattern("closeX.png"):similar(imgAccuracy), 3)
+      existsClick(Pattern("close.png"), 0.1)
+      yesRegion:existsClick(Pattern("yes.png"):similar(imgAccuracy * 0.9), 3)
+      showBattleResult()
+    end
+
+    -- edge cases? FIXME: where is this..
+    if (backButtonRegion:exists(Pattern("backButton.png"):similar(runeAccuracy * 0.8), 0.1) or dropInfoRegion:exists(Pattern("dropInfo.png"):similar(imgAccuracy), 0.1) or riftBackRegion:exists(Pattern("back2Button.png"), 0.1)) and not arenaRankRegion:exists(Pattern("arenaRank.png"):similar(imgAccuracy), 0.1) then
+      runScenarioDungeon()
+      start()
+    end
   end
-  wait(scanDelay)
+  nocacheSnapshot()
 end
