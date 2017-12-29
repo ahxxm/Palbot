@@ -1698,12 +1698,8 @@ function runRiftRaidStart ()
       refillYesRegion:existsClick(Pattern("yes.png"):similar(0.6), 0.1)
     end
 
-    if raidReadyRegion:existsClick(Pattern("raidReady.png"):similar(0.6), 0.1) then
-       toast("raid ready clicked")
-    end
-    
+    raidReadyRegion:existsClick(Pattern("raidReady.png"):similar(0.6), 0.1)
     if noLeaderSkillRegion:exists(Pattern("noLeaderSkill.png"):similar(0.6), 0.1) then
-       toast("no leader clicked")
        noLeaderSkillYesRegion:existsClick(Pattern("yes.png"):similar(0.6), 0.1)
     end
   end
