@@ -257,8 +257,7 @@ function zoomTest()
 end
 function testHighlight()
   while runTestHighlight do
-     toaNextStageRegion:highlight(10)
-     replayRegion:highlight(10)
+     raidLossTotalRegion:highlight(10)
      wait(5)
   end
 end
@@ -1658,33 +1657,29 @@ function resetNoRaidActivity()
 end
 function runRiftRaidStart ()
   while runRiftRaid do
-    raidJoinRegion:highlight()
-    raidJoinRegion:existsClick(Pattern("raidJoinParty.png"):similar(0.6), 0.1)
-    raidJoinRegion:highlight()
-    raidReadyRegion:highlight()
-    raidReadyRegion:existsClick(Pattern("raidReady.png"):similar(0.6), 0.1)
+    cacheSnapshot()
+    -- TODO: test with different position(left/mid/right), yes/no leader skill, no energy,
+    -- mid requires double click and both ready
+    -- raidStart for mid, ready for left/right
     if raidReadyRegion:existsClick(Pattern("raidStart.png"):similar(0.6), 0.1) then
-      refillYesRegion:existsClick(Pattern("yes.png"):similar(0.6), 0.1)
+       refillYesRegion:existsClick(Pattern("yes.png"):similar(0.6), 0.1)
     end
-    raidReadyRegion:highlight()
-    noLeaderSkillRegion:highlight()
-    if noLeaderSkillRegion:exists(Pattern("noLeaderSkill.png"):similar(0.6), 0.1) then
-      noLeaderSkillYesRegion:existsClick(Pattern("yes.png"):similar(0.6), 0.1)
-    end
-    noLeaderSkillRegion:highlight()
-    raidVictoryTotalRegion:highlight()
+    raidReadyRegion:existsClick(Pattern("raidReady.png"):similar(0.6), 0.1)
+
+    -- win
+    nocacheSnapshot()
     if raidVictoryTotalRegion:exists(Pattern("raidVictoryTotal.png"):similar(0.6), 0.1) then
       wait(4)
-      raidVictoryTotalRegion:existsClick(Pattern("raidVictoryTotal.png"):similar(0.6), 0.1)
+      -- raidVictoryTotalRegion overlaps with 2nd monster of left's first row
+      -- increase similar arg to prevent
+      raidVictoryTotalRegion:existsClick(Pattern("raidVictoryTotal.png"):similar(0.9), 0.1)
       winCount = winCount + 1
       showBattleResult("Start Battle")
       resetTimerNoActivity()
       showBattleResult("Battle Start")
       printBattleMessage()
-    end
-    raidVictoryTotalRegion:highlight()
-    raidLossTotalRegion:highlight()
-    if raidLossTotalRegion:exists(Pattern("raidVictoryTotal.png"):similar(0.6), 0.1) then
+      -- loss
+    elseif raidLossTotalRegion:exists(Pattern("raidVictoryTotal.png"):similar(0.6), 0.1) then
       raidLossTotalRegion:existsClick(Pattern("raidVictoryTotal.png"):similar(0.6), 0.1)
       loseCount = loseCount + 1
       showBattleResult("Battle Start")
@@ -1692,44 +1687,28 @@ function runRiftRaidStart ()
       resetTimerNoActivity()
       wait(3)
     end
-    raidLossTotalRegion:highlight()
-    raidOkRegion:highlight()
     raidOkRegion:existsClick(Pattern("ok.png"):similar(0.6), 0.1)
-    raidOkRegion:highlight()
-    notEnoughEnergyRegion:highlight()
+
+    -- buy energy
     if notEnoughEnergyRegion:exists(Pattern("notEnoughEnergy.png"):similar(0.6), 0.1) then
-      if not arenaCheck and runArena then
-        arenaCheck = true
-        runRiftRaid = false
-        refillNoRegion:existsClick(Pattern("noPurchase.png"):similar(.6), 3)
-        raidVictoryTotalRegion:existsClick(Pattern("raidVictoryTotal.png"):similar(0.6), 0.1)
-        if sameSessionRegion:exists(Pattern("sameSession.png"):similar(0.6), 0.1) then
-          refillNoRegion:existsClick(Pattern("noPurchase.png"):similar(0.6), 0.1)
-        end
-        existsClick(Pattern("closeX.png"):similar(.6), 3)
-        existsClick(Pattern("back2Button.png"):similar(.6), 3)
-        findArena()
-      else
-        arenaCheck = false
-        refill()
-        replayOrNext()
-        start()
-      end
+       refill()
     end
-    notEnoughEnergyRegion:highlight()
-    raidGetRegion:highlight()
     raidGetRegion:existsClick(Pattern("get.png"):similar(0.6), 0.1)
-    raidGetRegion:highlight()
-    sameSessionRegion:highlight()
     if sameSessionRegion:exists(Pattern("sameSession.png"):similar(0.6), 2) then
       refillYesRegion:existsClick(Pattern("yes.png"):similar(0.6), 0.1)
     end
-    sameSessionRegion:highlight()
-    if checkNoRaidActivity == true then
-      keyevent(4)
+
+    if raidReadyRegion:existsClick(Pattern("raidReady.png"):similar(0.6), 0.1) then
+       toast("raid ready clicked")
+    end
+    
+    if noLeaderSkillRegion:exists(Pattern("noLeaderSkill.png"):similar(0.6), 0.1) then
+       toast("no leader clicked")
+       noLeaderSkillYesRegion:existsClick(Pattern("yes.png"):similar(0.6), 0.1)
     end
   end
 end
+
 defaultValues ()
 defaultTrueFalse ()
 defaultRegionLocation ()
@@ -1742,8 +1721,10 @@ timerNoActivity = Timer()
 while true do
   -- subroutines
   if runRiftRaid == true then
-    findRift()
-    clickRiftRaid()
+    -- supervised rift raid run, does not find/reconnect team
+    -- findRift()
+    -- clickRiftRaid()
+    -- while loop inside
     runRiftRaidStart()
   elseif runTestHighlight == true then
     testHighlight()
