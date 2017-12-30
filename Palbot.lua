@@ -83,7 +83,7 @@ function defaultTrueFalse ()
    runRiftRaid = false
    runLiveArena = false
    isArena = false
-   immersiveMode = false
+   immersiveMode = true
    is16by9 = false
    is16by10 = false
    slot8FodderScan = false
@@ -362,14 +362,15 @@ end
 function dialogBox()
   dialogInit()
   spinnerFarmLoc = {
-    "Current Battle",
-    "------------------------------------------", -- 2
+    "This Dungeon",  -- eval runes
+    "This Scenario", -- sell all + stop max
+    "------------------------------------", -- 3
     "Giant's Keep",
     "Dragon's Lair",
     "Necropolis",
-    "------------------------------------------", -- 6
+    "------------------------------------", -- 7
     "Rift Raid",
-    "------------------------------------------", -- 8
+    "------------------------------------", -- 9
     "Live Arena",
   }
   addTextView("Farming Mode: ")
@@ -381,53 +382,41 @@ function dialogBox()
   addTextView("  ")
   addCheckBox("dim", "Dim Screen", false)
   addTextView("  ")
-  addCheckBox("stopMax", "Stop at max level?", false)
-  addTextView("  ")
   newRow()
-  
-  addTextView("-------------------- Rune Options --------------------")
-  newRow()
-  addTextView("Disable both will enable rune filter. Don't enable both.")
-  newRow()
-  addCheckBox("sellAllRune", "Sell all runes?", false)
-  addTextView("  ")
-  addCheckBox("keepAll", "Keep all runes?", false)
-  newRow()
+
   addTextView("-------------------- Advanced Options --------------------")
   newRow()
   spinnerResolution = {
-    "Auto Detect",
-    "1920x1080 (16:9)",
+    "Auto",
+    "1920x1080",
     "Others"
   }
   addTextView("Resolution: ")
   addSpinner("screenRes", spinnerResolution, spinnerResolution[1])
   addTextView("  ")
-  addCheckBox("immersiveMode", "Immersive Mode (fullscreen)", false)
-  newRow()
-  addCheckBox("autoUpdate", "Auto Update    ", true)
+  addCheckBox("immersiveMode", "Immersive", false) -- no virtual button
+  addCheckBox("autoUpdate", "Auto Update", true)
   newRow()
   dialogShowFullScreen("QuickClick Summoners War")
 end
 function setDialogOptions()
   if farmLoc == spinnerFarmLoc[1] then
   elseif farmLoc == spinnerFarmLoc[2] then
-  elseif farmLoc == spinnerFarmLoc[3] then
-    runGiant = true
-  elseif farmLoc == spinnerFarmLoc[4] then
-    runDragon = true
-  elseif farmLoc == spinnerFarmLoc[5] then
-    runNecro = true
-  elseif farmLoc == spinnerFarmLoc[6] then
-  elseif farmLoc == spinnerFarmLoc[7] then
-    runRiftRaid = true
-  elseif farmLoc == spinnerFarmLoc[8] then
-  elseif farmLoc == spinnerFarmLoc[9] then
-    runLiveArena = true
-  end
-  
-  if stopMax then
     stopMaxLevel = true
+    sellAllRune = true
+  elseif farmLoc == spinnerFarmLoc[3] then
+  elseif farmLoc == spinnerFarmLoc[4] then
+    runGiant = true
+  elseif farmLoc == spinnerFarmLoc[5] then
+    runDragon = true
+  elseif farmLoc == spinnerFarmLoc[6] then
+    runNecro = true
+  elseif farmLoc == spinnerFarmLoc[7] then
+  elseif farmLoc == spinnerFarmLoc[8] then
+    runRiftRaid = true
+  elseif farmLoc == spinnerFarmLoc[9] then
+  elseif farmLoc == spinnerFarmLoc[10] then
+    runLiveArena = true
   end
   
   if runArena then
@@ -443,7 +432,7 @@ function setAdvancedOptions()
   screenW = screen:getX()
   screenH = screen:getY()
   if screenRes == spinnerResolution[1] then
-    toast("AutoDetect:  " .. screenW .. "x" .. screenH .. "")
+    -- toast("AutoDetect:  " .. screenW .. "x" .. screenH .. "")
     if screenW == 1920 and screenH == 1080 then
        setImagePath(localPath .. "1920x1080")
        Settings:setScriptDimension(true, 1920)
@@ -454,7 +443,7 @@ function setAdvancedOptions()
     else
        scriptExit("Res other than 1920x1080 is not supported")
     end
-  elseif screenRes == "1920x1080 (16:9)" then
+  elseif screenRes == "1920x1080" then
     setImagePath(localPath .. "1920x1080")
     Settings:setScriptDimension(true, 1920)
     Settings:setCompareDimension(true, 1920)
