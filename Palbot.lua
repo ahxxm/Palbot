@@ -370,7 +370,8 @@ function dialogBox()
     "Necropolis",
     "------------------------------------", -- 7
     "Rift Raid",
-    "------------------------------------", -- 9
+    "Rift Beast",    -- keep all
+    "------------------------------------", -- 10
     "Live Arena",
   }
   addTextView("Farming Mode: ")
@@ -415,7 +416,9 @@ function setDialogOptions()
   elseif farmLoc == spinnerFarmLoc[8] then
     runRiftRaid = true
   elseif farmLoc == spinnerFarmLoc[9] then
+    keepAll = true
   elseif farmLoc == spinnerFarmLoc[10] then
+  elseif farmLoc == spinnerFarmLoc[11] then
     runLiveArena = true
   end
   
