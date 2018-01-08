@@ -564,21 +564,6 @@ end
 function nocacheSnapshot()
   usePreviousSnap(false)
 end
-function clearBattleSlotMax()
-  usePreviousSnap(false)
-  if slot2Max == true then
-    click(battleSlot2Region)
-    slot2Max = false
-  end
-  if slot3Max == true then
-    click(battleSlot3Region)
-    slot3Max = false
-  end
-  if slot4Max == true then
-    click(battleSlot4Region)
-    slot4Max = false
-  end
-end
 function isBattleSlotMax()
   nocacheSnapshot()
   -- wait exp animation
