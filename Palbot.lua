@@ -48,10 +48,10 @@ function defaultValues()
 
   -- no activity options
   timerNoActivity = 0
-  timerNoRaidActivity = 0
+  timerNoRaidActivity = Timer()
   maxNoActivityTimeout = 600
   connectionTimeout = 600
-  maxNoRaidActivity = 300
+  maxNoRaidActivity = 180
   raidFailureCount = 0
 
   -- screen
@@ -102,7 +102,7 @@ function defaultTrueFalse ()
    keepAll = false
    customKeep = true
    runTestHighlight = false
-   debug = true
+   debug = false
    sellingRune = false
    runRival = false
    runMatchUp = false
@@ -115,7 +115,7 @@ function defaultRegionLocation ()
   runeRankRegion = Region(630, 350, 130, 30)
   grindstoneRegion = Region(760, 450, 300, 100)
   enchantedGemRegion = Region(750, 350, 350, 150)
-  raidJoinRegion = Region(1300, 845, 250, 65)
+  raidJoinRegion = Region(1280, 825, 290, 105)
   raidReadyRegion = Region(1550, 950, 250, 75)
   okRaidRegion = Region(910, 615, 100, 80)
   raidVictoryTotalRegion = Region(125, 600, 150, 50)
@@ -180,6 +180,7 @@ function defaultRegionLocation ()
   sdChargeRegion = Region(1450, 310, 185, 140)
   dropInfoRegion = Region(1045, 180, 175, 55)
   closeXRiftRegion = Region(1635, 35, 70, 70)
+  RiftRaidQuitRegion = Region(1820, 0, 100, 100)
   riftBattleRegion = Region(1345, 850, 155, 65)
   riftRankRegion = Region(1440, 740, 225, 90)
   riftYesRegion = Region(650, 585, 285, 140)
@@ -259,7 +260,7 @@ function zoomTest()
 end
 function testHighlight()
   while runTestHighlight do
-     raidLossTotalRegion:highlight(10)
+     raidJoinRegion:highlight(10)
      wait(5)
   end
 end
@@ -1440,7 +1441,8 @@ function clickRiftRaid()
     refillYesRegion:existsClick(Pattern("yes.png"):similar(0.6), 0.1)
   end
   if existsClick(Pattern("riftRaid.png"), 3) then
-    existsClick(Pattern("raidJoinParty.png"):similar(0.6), 0.1)
+    debugt("join r5 team")
+    raidJoinRegion:existsClick(Pattern("raidJoinParty.png"):similar(0.3), 0.1)
     riftBattleRegion:existsClick(Pattern("battle.png"), 3)
   end
 end
@@ -1457,6 +1459,7 @@ function existsRift()
     return false
   end
 end
+
 function debugt(msg)
   -- debug toast
   if debug == true then
@@ -1472,20 +1475,27 @@ function findRift()
     return
   end
 
-  -- long time no raid/failure count, exit and find new
-  if checkNoRaidActivity == true or raidFailureCount > 3 then
+  -- team mate afk, or failure count >= 3, exit and find new
+  if checkNoRaidActivity() == true or raidFailureCount > 2 then
+    if raidFailureCount > 2 then
+      debugt("raid quit: failure")
+    else
+      debugt("raid quit: not active")
+    end
+
     raidFailureCount = 0
-    -- TODO:
-    debugt("try quit rift")
+    RiftRaidQuitRegion:existsClick(Pattern("closeX.png"):similar(0.5), 0.1)
+    refillYesRegion:existsClick(Pattern("yes.png"):similar(0.6), 0.1)
+    resetNoRaidActivity()
   end
 
   -- inside a team 
   if raidReadyRegion:existsClick(Pattern("raidReady.png"):similar(0.6), 0.1) then
-    debugt("inside a team")
+    debugt("raid ready button clicked")
     return
   end
   if raidReadyRegion:existsClick(Pattern("raidStart.png"):similar(0.6), 0.1) then
-    debugt("raid start triggeredddd")
+    debugt("raid start clicked(leader)")
     refillYesRegion:existsClick(Pattern("yes.png"):similar(0.6), 0.1)
     return
   end
@@ -1712,14 +1722,13 @@ showBattleResult("Begin")
 timerNoActivity = Timer()
 while true do
   -- subroutines
-  if runRiftRaid == true then
-    -- supervised rift raid run, does not find/reconnect team
+  if runTestHighlight == true then
+    testHighlight()
+  elseif runRiftRaid == true then
     findRift()
     clickRiftRaid()
     -- while loop inside
     runRiftRaidStart()
-  elseif runTestHighlight == true then
-    testHighlight()
   elseif runLiveArena == true then
     runLiveArenaStart()
 
