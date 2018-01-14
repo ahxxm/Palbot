@@ -604,6 +604,38 @@ function checkTimerNoActivity()
     return false
   end
 end
+-- copied from commonLib.lua
+function resumeROI(oldROI)
+    if (oldROI) then
+        Settings:setROI(oldROI)
+    else
+        Settings:setROI()
+    end
+end
+function existsMultiMax(target, region)
+  local oldROI = Settings:getROI()
+  local maxScore = 0
+  local maxIndex = 0
+  local match
+  if (region ~= nil) then Settings:setROI(region) end
+  for i, t in ipairs(target) do
+      if (i == 1) then usePreviousSnap(false) else usePreviousSnap(true) end
+      if (exists(t, 0)) then -- check once
+      local score = getLastMatch():getScore()
+      if (score > maxScore) then
+          maxScore = score
+          maxIndex = i
+          match = getLastMatch()
+      end
+      end
+  end
+  resumeROI(oldROI)
+  usePreviousSnap(false)
+  if (maxScore == 0) then
+      return -1
+  end
+  return maxIndex, match
+end
 function findRuneRarity()
   runeRarityRegion:highlight()
   local bestMatchIndex = existsMultiMax(runeRarityImages, runeRarityRegion)
