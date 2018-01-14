@@ -1,17 +1,16 @@
 localPath = scriptPath()
-commonLib = loadstring(httpGet("https://raw.githubusercontent.com/AnkuLua/commonLib/master/commonLib.lua"))()
-getNewestVersion = loadstring(httpGet("https://raw.githubusercontent.com/ahxxm/Palbot/master/version.lua"))
-latestVersion = getNewestVersion()
-currentVersion = dofile(localPath .."version.lua")
-print (currentVersion)
-print (latestVersion)
+-- commonLib = loadstring(httpGet("https://raw.githubusercontent.com/AnkuLua/commonLib/master/commonLib.lua"))()
 setDragDropTiming(100, 100)
 setDragDropStepCount(10)
 setDragDropStepInterval(100)
 mainStatImages = {  "hpMain.png", "defMain.png", "atkMain.png", "spdMain.png", "criRateMain.png",
   "criDmgMain.png", "resMain.png", "accMain.png" }
 runeRarityImages = {"runeLegendary.png", "runeHero.png", "runeRare.png", "runeMagic.png", "runeNormal.png"}
+
 function automaticUpdates ()
+  getNewestVersion = loadstring(httpGet("https://raw.githubusercontent.com/ahxxm/Palbot/master/version.lua"))
+  latestVersion = getNewestVersion()
+  currentVersion = dofile(localPath .."version.lua")
   if autoUpdate == true then
     if currentVersion == latestVersion then
       toast ("You are up to date!")
@@ -23,6 +22,7 @@ function automaticUpdates ()
     end
   end
 end
+
 function defaultValues()
  -- run stats
   winCount = 0
@@ -51,7 +51,8 @@ function defaultValues()
   timerNoRaidActivity = 0
   maxNoActivityTimeout = 600
   connectionTimeout = 600
-  maxNoRaidActivity = 120
+  maxNoRaidActivity = 300
+  raidFailureCount = 0
 
   -- screen
   screenH = 0
@@ -101,6 +102,7 @@ function defaultTrueFalse ()
    keepAll = false
    customKeep = true
    runTestHighlight = false
+   debug = true
    sellingRune = false
    runRival = false
    runMatchUp = false
@@ -1432,17 +1434,18 @@ function findDungeon()
   end
 end
 
-function enterRift()
-  existsClick(Pattern("mapRiftOfWorlds.png"), 3)
-  riftYesRegion:existsClick(Pattern("riftYes.png"), 3)
-end
 function clickRiftRaid()
+  nocacheSnapshot()
+  if existsClick(Pattern("mapRiftOfWorlds.png"), 3) then
+    refillYesRegion:existsClick(Pattern("yes.png"):similar(0.6), 0.1)
+  end
   if existsClick(Pattern("riftRaid.png"), 3) then
+    existsClick(Pattern("raidJoinParty.png"):similar(0.6), 0.1)
     riftBattleRegion:existsClick(Pattern("battle.png"), 3)
-    start()
   end
 end
 function clickRift()
+  toast("clicking rift")
   clickRiftRaid()
 end
 function existsRift()
@@ -1454,34 +1457,59 @@ function existsRift()
     return false
   end
 end
+function debugt(msg)
+  -- debug toast
+  if debug == true then
+    toast(msg)
+  end
+end
+
 function findRift()
+  nocacheSnapshot()
   if runRiftRaid then
-    toast("Finding Rift (Raid)")
+    debugt("Finding Rift (Raid)")
   else
     return
   end
+
+  -- long time no raid/failure count, exit and find new
+  if checkNoRaidActivity == true or raidFailureCount > 3 then
+    raidFailureCount = 0
+    -- TODO:
+    debugt("try quit rift")
+  end
+
+  -- inside a team 
+  if raidReadyRegion:existsClick(Pattern("raidReady.png"):similar(0.6), 0.1) then
+    debugt("inside a team")
+    return
+  end
+  if raidReadyRegion:existsClick(Pattern("raidStart.png"):similar(0.6), 0.1) then
+    debugt("raid start triggeredddd")
+    refillYesRegion:existsClick(Pattern("yes.png"):similar(0.6), 0.1)
+    return
+  end
+  
   if existsRift() then
     clickRift()
+  elseif battleIconRegion:existsClick(Pattern("iconBattle.png"), 2) then
+    debugt("Battle icon")
+    clickRift()
   elseif exists(Pattern("mapRiftOfWorlds.png"), 0.1) then
-    enterRift()
     clickRift()
   elseif arenaRankRegion:exists(Pattern("arenaRank.png"):similar(imgAccuracy), 0.1) then
     closeArenaDialogBox()
-    enterRift()
     clickRift()
   elseif dialogCairoDungeonRegion:exists(Pattern("cairoDungeon.png"):similar(imgAccuracy), 0.1) then
     closeCairoDungeonDialogBox()
     if exists(Pattern("mapRiftOfWorlds.png"):similar(imgAccuracy), 0.1) then
-      enterRift()
       clickRift()
     else
       moveLeft()
       if exists(Pattern("mapRiftOfWorlds.png"):similar(imgAccuracy), 0.1) then
-        enterRift()
         clickRift()
       else
         moveLeft()
-        enterRift()
         clickRift()
       end
     end
@@ -1489,12 +1517,10 @@ function findRift()
     closeScenarioDialogBox()
     moveLeft()
     if exists(Pattern("mapRiftOfWorlds.png"), 0.1) then
-      enterRift()
       clickRift()
     else
       moveLeft()
       if exists(Pattern("mapRiftOfWorlds.png"), 0.1) then
-        enterRift()
         clickRift()
       end
     end
@@ -1504,52 +1530,43 @@ function findRift()
     wait(1)
     moveLeft()
     if exists(Pattern("mapRiftOfWorlds.png"):similar(imgAccuracy), 0.1) then
-      enterRift()
       clickRift()
     else
       moveLeft()
       if exists(Pattern("mapRiftOfWorlds.png"):similar(imgAccuracy), 0.1) then
-        enterRift()
         clickRift()
       end
     end
   elseif riftBackRegion:existsClick(Pattern("back2Button.png"), 3) then
     moveLeft()
     if exists(Pattern("mapRiftOfWorlds.png"):similar(imgAccuracy), 0.1) then
-      enterRift()
       clickRift()
     else
       moveLeft()
       if exists(Pattern("mapRiftOfWorlds.png"):similar(imgAccuracy), 0.1) then
-        enterRift()
         clickRift()
       end
     end
   elseif dialogToaRegion:exists(Pattern("dialogTOA.png"):similar(imgAccuracy), 0.1) then
     closeToaDialogBox()
     if exists(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 0.1) then
-      enterRift()
       clickRift()
     else
       moveLeft()
       if exists(Pattern("mapCairoDungeon.png"):similar(imgAccuracy), 0.1) then
-        enterRift()
         clickRift()
       else
         moveLeft()
-        enterRift()
         clickRift()
       end
     end
   elseif backButtonRegion:exists(Pattern("backButton.png"):similar(0.8), 0.1) then
     moveLeft()
     if exists(Pattern("mapRiftOfWorlds.png"), 0.1) then
-      enterRift()
       clickRift()
     else
       moveLeft()
       if exists(Pattern("mapRiftOfWorlds.png"), 0.1) then
-        enterRift()
         clickRift()
       end
     end
@@ -1633,53 +1650,55 @@ function resetNoRaidActivity()
   timerNoRaidActivity:set()
 end
 function runRiftRaidStart ()
-  while runRiftRaid do
-    cacheSnapshot()
-    -- TODO: test with different position(left/mid/right), yes/no leader skill, no energy,
-    -- mid requires double click and both ready
-    -- raidStart for mid, ready for left/right
-    if raidReadyRegion:existsClick(Pattern("raidStart.png"):similar(0.6), 0.1) then
-       refillYesRegion:existsClick(Pattern("yes.png"):similar(0.6), 0.1)
-    end
-    raidReadyRegion:existsClick(Pattern("raidReady.png"):similar(0.6), 0.1)
-
-    -- win
-    nocacheSnapshot()
-    if raidVictoryTotalRegion:exists(Pattern("raidVictoryTotal.png"):similar(0.6), 0.1) then
-      wait(4)
-      -- raidVictoryTotalRegion overlaps with 2nd monster of left's first row
-      -- increase similar arg to prevent
-      raidVictoryTotalRegion:existsClick(Pattern("raidVictoryTotal.png"):similar(0.9), 0.1)
-      winCount = winCount + 1
-      showBattleResult("Start Battle")
-      resetTimerNoActivity()
-      showBattleResult("Battle Start")
-      printBattleMessage()
-      -- loss
-    elseif raidLossTotalRegion:exists(Pattern("raidVictoryTotal.png"):similar(0.6), 0.1) then
-      raidLossTotalRegion:existsClick(Pattern("raidVictoryTotal.png"):similar(0.6), 0.1)
-      loseCount = loseCount + 1
-      showBattleResult("Battle Start")
-      printBattleMessage()
-      resetTimerNoActivity()
-      wait(3)
-    end
-    raidOkRegion:existsClick(Pattern("ok.png"):similar(0.6), 0.1)
-
-    -- buy energy
-    if notEnoughEnergyRegion:exists(Pattern("notEnoughEnergy.png"):similar(0.6), 0.1) then
-       refill()
-    end
-    raidGetRegion:existsClick(Pattern("get.png"):similar(0.6), 0.1)
-    if sameSessionRegion:exists(Pattern("sameSession.png"):similar(0.6), 2) then
-      refillYesRegion:existsClick(Pattern("yes.png"):similar(0.6), 0.1)
-    end
-
-    raidReadyRegion:existsClick(Pattern("raidReady.png"):similar(0.6), 0.1)
-    if noLeaderSkillRegion:exists(Pattern("noLeaderSkill.png"):similar(0.6), 0.1) then
-       noLeaderSkillYesRegion:existsClick(Pattern("yes.png"):similar(0.6), 0.1)
-    end
+  --while runRiftRaid do
+  cacheSnapshot()
+  -- TODO: test with different position(left/mid/right), yes/no leader skill, no energy,
+  -- mid requires double click and both ready
+  -- raidStart for mid, ready for left/right
+  if raidReadyRegion:existsClick(Pattern("raidStart.png"):similar(0.6), 0.1) then
+     refillYesRegion:existsClick(Pattern("yes.png"):similar(0.6), 0.1)
   end
+  raidReadyRegion:existsClick(Pattern("raidReady.png"):similar(0.6), 0.1)
+
+  -- win
+  nocacheSnapshot()
+  if raidVictoryTotalRegion:exists(Pattern("raidVictoryTotal.png"):similar(0.6), 0.1) then
+    wait(4)
+    -- raidVictoryTotalRegion overlaps with 2nd monster of left's first row
+    -- increase similar arg to prevent
+    raidVictoryTotalRegion:existsClick(Pattern("raidVictoryTotal.png"):similar(0.9), 0.1)
+    winCount = winCount + 1
+    raidFailureCount = 0
+    showBattleResult("Start Battle")
+    resetTimerNoActivity()
+    showBattleResult("Battle Start")
+    printBattleMessage()
+    -- loss
+  elseif raidLossTotalRegion:exists(Pattern("raidVictoryTotal.png"):similar(0.6), 0.1) then
+    raidLossTotalRegion:existsClick(Pattern("raidVictoryTotal.png"):similar(0.6), 0.1)
+    loseCount = loseCount + 1
+    raidFailureCount = raidFailureCount + 1
+    showBattleResult("Battle Start")
+    printBattleMessage()
+    resetTimerNoActivity()
+    wait(3)
+  end
+  raidOkRegion:existsClick(Pattern("ok.png"):similar(0.6), 0.1)
+
+  -- buy energy
+  if notEnoughEnergyRegion:exists(Pattern("notEnoughEnergy.png"):similar(0.6), 0.1) then
+     refill()
+  end
+  raidGetRegion:existsClick(Pattern("get.png"):similar(0.6), 0.1)
+  if sameSessionRegion:exists(Pattern("sameSession.png"):similar(0.6), 2) then
+    refillYesRegion:existsClick(Pattern("yes.png"):similar(0.6), 0.1)
+  end
+
+  raidReadyRegion:existsClick(Pattern("raidReady.png"):similar(0.6), 0.1)
+  if noLeaderSkillRegion:exists(Pattern("noLeaderSkill.png"):similar(0.6), 0.1) then
+     noLeaderSkillYesRegion:existsClick(Pattern("yes.png"):similar(0.6), 0.1)
+  end
+  --end
 end
 
 defaultValues ()
@@ -1695,8 +1714,8 @@ while true do
   -- subroutines
   if runRiftRaid == true then
     -- supervised rift raid run, does not find/reconnect team
-    -- findRift()
-    -- clickRiftRaid()
+    findRift()
+    clickRiftRaid()
     -- while loop inside
     runRiftRaidStart()
   elseif runTestHighlight == true then
@@ -1819,7 +1838,7 @@ while true do
     end
     if notEnoughWingRegion:exists(Pattern("notEnoughWing.png"):similar(.6), 0.1) then
       refillNoRegion:existsClick(Pattern("noPurchase.png"):similar(0.6), 3)
-      if farmLoc == spinnerFarmLoc[7] then
+      if farmLoc == spinnerFarmLoc[8] then
         nocacheSnapshot()
         runRiftRaid = true
         existsClick(Pattern("closeX.png"):similar(.6), 3)
