@@ -1713,6 +1713,7 @@ function runRiftRaidStart ()
     raidFailureCount = 0
     showBattleResult("Start Battle")
     resetTimerNoActivity()
+    resetNoRaidActivity()
     showBattleResult("Battle Start")
     printBattleMessage()
     -- loss
@@ -1723,6 +1724,7 @@ function runRiftRaidStart ()
     showBattleResult("Battle Start")
     printBattleMessage()
     resetTimerNoActivity()
+    resetNoRaidActivity()
     wait(3)
   end
   raidOkRegion:existsClick(Pattern("ok.png"):similar(0.6), 0.1)
